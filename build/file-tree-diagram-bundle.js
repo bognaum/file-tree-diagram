@@ -35,7 +35,7 @@ class FileTree {
 	}
 
 	build (elem, templ) {
-		elem.classList.add(this.cssClassPrefix);
+		elem.classList.add(this.classPrefix);
 		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
 		if (ob) {
 			elem.innerHTML = (0,_draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__.default)(
@@ -67,7 +67,9 @@ class FileTree {
 		}
 	}
 
-	static testHTML = _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__.default.testHTML
+	testHTML () {
+		return _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__.default.testHTML(this.classPrefix);
+	}
 }
 
 

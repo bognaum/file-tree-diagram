@@ -43,5 +43,7 @@ export default class FileTree {
 		}
 	}
 
-	static testHTML = iconManager.testHTML
+	testHTML () {
+		return iconManager.testHTML(this.classPrefix);
+	}
 }

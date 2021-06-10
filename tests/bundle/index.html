@@ -25,11 +25,11 @@
 		}
 	</style>
 	<script type="text/javascript" src="../../build/file-tree-diagram-bundle.js"></script>
-	<title>file-tree test</title>
+	<title>FTD - Test of bundle</title>
 </head>
 <body>
 	<div class="header">
-		<h1>Test</h1>
+		<h1>Test of bundle</h1>
 		<div class="links">
 			<a target="" href="?bg=fff&color=333">Light</a>
 			<a target="" href="?bg=222&color=ccc">Dark</a>
@@ -644,7 +644,7 @@
 		document.querySelectorAll(".file-tree").forEach((v) => {
 			ftd.build(v, v.textContent);
 		});
-		file_icons_test.innerHTML = FileTreeDiagram.testHTML();
+		file_icons_test.innerHTML = ftd.testHTML();
 
 	</script>
 </body>

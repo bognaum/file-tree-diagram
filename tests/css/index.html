@@ -25,11 +25,11 @@
 		}
 	</style>
 	<link rel="stylesheet" type="text/css" href="./../../CSS/file-tree-diagram.css">
-	<title>file-tree test</title>
+	<title>FTD - Test of CSS</title>
 </head>
 <body>
 	<div class="header">
-		<h1>Test</h1>
+		<h1>Test of CSS</h1>
 		<div class="links">
 			<a target="" href="?bg=fff&color=333">Light</a>
 			<a target="" href="?bg=222&color=ccc">Dark</a>
@@ -642,7 +642,7 @@
 	<script type="module">
 		import FTD from "./../../file-tree-diagram.js";
 		const ftd = new FTD();
-		file_icons_test.innerHTML = FTD.testHTML();
+		file_icons_test.innerHTML = ftd.testHTML();
 		document.querySelectorAll(".file-tree-diagram").forEach((v) => {
 			ftd.build(v, v.textContent);
 		});

@@ -24,11 +24,11 @@
 			color: #999;
 		}
 	</style>
-	<title>file-tree test</title>
+	<title>FTD - Main test page</title>
 </head>
 <body>
 	<div class="header">
-		<h1>Test</h1>
+		<h1>Main test page</h1>
 		<div class="links">
 			<a target="_blank" href="./css">css</a>
 			<a target="_blank" href="./module">module</a>
@@ -644,7 +644,7 @@
 	<script type="module">
 		import FTD from "./../file-tree-diagram.js";
 		const ftd = new FTD();
-		file_icons_test.innerHTML = FTD.testHTML();
+		file_icons_test.innerHTML = ftd.testHTML();
 		document.querySelectorAll(".ftd").forEach((v) => {
 			ftd.build(v, v.textContent);
 		});

@@ -1,0 +1,7 @@
+# .gitignore 
+
+# *.css
+# *.css.map
+# FileIcons/
+# FileIcons Mono/
+node_modules/

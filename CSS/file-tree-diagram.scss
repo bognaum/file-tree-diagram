@@ -1,0 +1,27 @@
+$cl_pref: "file-tree-diagram";
+
+.#{$cl_pref}-icon {
+	font-family: consolas, monospace;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+@import "folder-icons-48-mono";
+@import "folder-icons-48";
+@import "typed-icons-48-mono";
+@import "typed-icons-48";
+
+.#{$cl_pref} {
+	font-family: consolas;
+	.#{$cl_pref}__header {
+	}
+	.#{$cl_pref}__branch {
+		color: #999;
+	}
+	.#{$cl_pref}__comment {
+		// color: #f77;
+		color: #999;
+		font-style: italic;
+	}
+}

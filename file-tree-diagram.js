@@ -11,6 +11,7 @@ export default class FileTree {
 	}
 
 	build (elem, templ) {
+		elem.classList.add(this.classPrefix);
 		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
 		if (ob) {
 			elem.innerHTML = assemblyTree(

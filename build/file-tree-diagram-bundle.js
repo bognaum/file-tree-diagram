@@ -35,6 +35,7 @@ class FileTree {
 	}
 
 	build (elem, templ) {
+		elem.classList.add(this.cssClassPrefix);
 		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
 		if (ob) {
 			elem.innerHTML = (0,_draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__.default)(

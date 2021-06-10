@@ -643,7 +643,7 @@
 
 	<script type="module">
 		import FTD from "./../file-tree-diagram.js";
-		const ftd = new FTD("ftd");
+		const ftd = new FTD();
 		file_icons_test.innerHTML = FTD.testHTML();
 		document.querySelectorAll(".ftd").forEach((v) => {
 			ftd.build(v, v.textContent);

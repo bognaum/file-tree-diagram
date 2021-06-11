@@ -18,7 +18,7 @@ export default class FileTree {
 
 		if (["executing", "executed", "exec-error"].some((v) => elem.classList.contains(v)))
 			throw new Error("(!) Highlighter. Already handled.", elem);
-		// elem.classList.add("executing");
+		elem.classList.add("executing");
 
 		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
 		if (ob) {
@@ -26,15 +26,19 @@ export default class FileTree {
 				ob, 
 				new BuildOptions(this.classPrefix)
 			).result;
-			// elem.classList.remove("executing", "executed", "exec-error");
-			// elem.classList.add("executed");
+			elem.classList.remove("executing", "executed", "exec-error");
+			elem.classList.add("executed");
 		} else if (jsonError) {
 			const jsonHl = new JsonErrHl(`${ this.classPrefix }-json-err-hl`);
-			elem.classList.add(`${ this.classPrefix }-json-err-hl`, "calm-clarified-theme");
-			jsonHl.highlightTextContent(elem);
-			jsonHl.scrollToFirstError(elem);
-			// elem.classList.remove("executing", "executed", "exec-error");
-			// elem.classList.add("exec-error");
+			// elem.classList.add(`${ this.classPrefix }-json-err-hl`, "calm-clarified-theme");
+			elem.innerHTML = "";
+			const 
+				firstLN = elem.dataset.lineNum || 1,
+				errorCodeField = jsonHl.getHighlighted(templ, firstLN);
+			elem.appendChild(errorCodeField);
+			jsonHl.scrollToFirstError(errorCodeField);
+			elem.classList.remove("executing", "executed", "exec-error");
+			elem.classList.add("exec-error");
 			console.error(`(!)`, jsonError);
 		} else {
 			throw new Error();

@@ -24,21 +24,17 @@
 			color: #999;
 		}
 	</style>
-	<title>FTD - Main test page</title>
+	<title>FTD - Test of module</title>
 </head>
 <body>
 	<div class="header">
-		<h1>Main test page</h1>
+		<h1>Test of module</h1>
 		<div class="links">
-			<a target="_blank" href="./css">css</a>
-			<a target="_blank" href="./module">module</a>
-			<a target="_blank" href="./bundle">bundle</a>
-			<a target="_blank" href="./json-errors">json-errors</a>
 			<a target="" href="?bg=fff&color=333">Light</a>
 			<a target="" href="?bg=222&color=ccc">Dark</a>
 		</div>
 	</div>
-	<pre class="ftd" data-line-num="41">
+	<pre class="file-tree" data-line-num="37">
 		{
 			"rootpath": "",
 			"name": "W:",
@@ -52,7 +48,7 @@
 				},
 				{
 					"name": "modules",
-					"opened": false,
+					"opened": false
 					"ch": true,
 					"iconstyle": "colored"
 				},
@@ -67,7 +63,7 @@
 			]
 		}
 	</pre>
-	<pre class="ftd" data-line-num="70">
+	<pre class="file-tree" data-line-num="66">
 		{
 			"name": "0-common",
 			"opened": true,
@@ -90,7 +86,7 @@
 								},
 								{
 									"name": "style.css.map"
-								},
+								}
 								{
 									"name": "style.scss"
 								}
@@ -118,7 +114,7 @@
 			]
 		}
 	</pre>
-	<pre class="ftd" data-line-num="121">
+	<pre class="file-tree" data-line-num="117">
 		{
 			"name": "0-common",
 			"opened": true,
@@ -161,7 +157,7 @@
 						},
 						{
 							"name": "index.php"
-						}
+						},
 					]
 				},
 				{
@@ -171,7 +167,7 @@
 		}
 	</pre>
 
-	<pre class="ftd" data-line-num="174">
+	<pre class="file-tree" data-line-num="177">
 		{
 			"name": "GIT",
 			"opened": true,
@@ -218,7 +214,7 @@
 									"name": "aliases-to-commands",
 									"comment": "aliases-to-commands",
 									"opened": false,
-									"ch": true
+									["ch": true]
 								},
 								{
 									"name": "basic-principles",
@@ -643,10 +639,10 @@
 	</script>
 
 	<script type="module">
-		import FTD from "./../file-tree-diagram.js";
-		const ftd = new FTD();
+		import FTD from "./../../file-tree-diagram.js";
+		const ftd = new FTD("file-tree");
 		file_icons_test.innerHTML = ftd.testHTML();
-		document.querySelectorAll(".ftd").forEach((v) => {
+		document.querySelectorAll(".file-tree").forEach((v) => {
 			ftd.build(v, v.textContent);
 		});
 	</script>

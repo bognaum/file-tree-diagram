@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.2";
+const version = "1.1.4";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {
@@ -56,7 +56,7 @@ class FileTree {
 			const jsonHl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default(`${ this.classPrefix }-json-err-hl`);
 			elem.innerHTML = "";
 			const 
-				firstLN = elem.dataset.lineNum || 1,
+				firstLN = getFirstLineNum(elem),
 				errorCodeField = jsonHl.getHighlighted(templ, firstLN);
 			elem.appendChild(errorCodeField);
 			jsonHl.scrollToFirstError(errorCodeField);
@@ -84,6 +84,16 @@ class FileTree {
 	testHTML () {
 		return _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__.default.testHTML(this.classPrefix);
 	}
+}
+
+function getFirstLineNum(el) {
+	const dln = parseInt(el.dataset.lineNum);
+	if (! dln)
+		return 1;
+	else if (el.nodeName == "PRE")
+		return dln + 1;
+	else 
+		return dln;
 }
 
 
@@ -531,7 +541,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.1";
+const version = "1.1.2";
 
 const {
 	token,

@@ -39,27 +39,84 @@
 			<a target="" href="?bg=222&color=ccc">Dark</a>
 		</div>
 	</div>
+	<h2>Syntax description</h2>
+	<table border="" cellpadding="5" cellspacing="0">
+		<tbody>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"name":</code></td>
+				<td>
+					<p>
+						A name of file or folder.
+					</p>
+				</td>
+			</tr>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"ch":</code></td>
+				<td>
+					<p>
+						A child files and folders.
+					</p>
+					<p>- if <code>"ch":</code> is falsy or absent - is is file</p>
+					<p>- if <code>"ch":</code> is truesy - is closed folder</p>
+					<p>- if <code>"ch":</code> is array - is opened folder</p>
+				</td>
+			</tr>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"comment":</code></td>
+				<td>
+					<p>A comment to this file or folder.</p>
+				</td>
+			</tr>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"iconstyle":</code></td>
+				<td>
+					<p>INHERITED style to file and folder icons.</p>
+					<p>May be <code>"mono"</code> or <code>"colored"</code>.</p>
+				</td>
+			</tr>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"self-iconstyle":</code></td>
+				<td>
+					<p>NOT INHERITED style to file and folder icons.</p>
+					<p>May be <code>"mono"</code> or <code>"colored"</code>.</p>
+				</td>
+			</tr>
+			<tr>
+				<!-- <td class="trn"></td> -->
+				<td style="text-align: right;"><code>"child-iconstyle":</code></td>
+				<td>
+					<p>
+						NOT INHERITED style to file and folder icons FOR CHILDREN of current folder only.
+					</p>
+					<p>May be <code>"mono"</code> or <code>"colored"</code>.</p>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Tests</h2>
 	<pre class="ftd" data-line-num="42">
 		{
 			"rootpath": "",
 			"name": "W:",
-			"opened": true,
 			"iconstyle": "mono",
 			"ch": [
 				{
 					"name": "domains",
-					"opened": false,
 					"ch": true
 				},
 				{
 					"name": "modules",
-					"opened": false,
 					"ch": true,
 					"iconstyle": "colored"
 				},
 				{
 					"name": "userdata",
-					"opened": false,
 					"ch": true
 				},
 				{
@@ -68,23 +125,19 @@
 			]
 		}
 	</pre>
-	<pre class="ftd" data-line-num="71">
+	<pre class="ftd" data-line-num="67">
 		{
 			"name": "0-common",
-			"opened": true,
 			"ch": [
 				{
 					"name": "www",
-					"opened": true,
 					"ch": [
 						{
 							"name": ".git",
-							"opened": false,
 							"ch": true
 						},
 						{
 							"name": "CSS",
-							"opened": true,
 							"ch": [
 								{
 									"name": "style.css"
@@ -99,7 +152,6 @@
 						},
 						{
 							"name": "favicon",
-							"opened": false,
 							"ch": true
 						},
 						{
@@ -119,24 +171,20 @@
 			]
 		}
 	</pre>
-	<pre class="ftd" data-line-num="122">
+	<pre class="ftd" data-line-num="113">
 		{
 			"name": "0-common",
-			"opened": true,
 			"iconstyle": "mono",
 			"ch": [
 				{
 					"name": "www",
-					"opened": true,
 					"ch": [
 						{
 							"name": ".git",
-							"opened": false,
 							"ch": true
 						},
 						{
 							"name": "CSS",
-							"opened": true,
 							"ch": [
 								{
 									"name": "style.css"
@@ -151,7 +199,6 @@
 						},
 						{
 							"name": "favicon",
-							"opened": false,
 							"ch": true
 						},
 						{
@@ -172,7 +219,7 @@
 		}
 	</pre>
 
-	<div class="ftd" data-line-num="175">
+	<div class="ftd" data-line-num="161">
 		{
 			"name": "0-common",
 			"iconstyle": "mono",
@@ -268,15 +315,13 @@
 		}
 	</div>
 
-	<pre class="ftd" data-line-num="270">
+	<pre class="ftd" data-line-num="257">
 		{
 			"name": "GIT",
-			"opened": true,
 			"iconstyle": "mono",
 			"ch": [
 				{
 					"name": "www",
-					"opened": true,
 					"ch": [
 						{
 							"name": "Ace_PlugKit",
@@ -301,152 +346,125 @@
 						},
 						{
 							"name": "content",
-							"opened": true,
 							"iconstyle": "colored",
 							"comment": "content",
 							"ch": [
 								{
 									"name": "add-del-files",
 									"comment": "add-del-files",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "aliases-to-commands",
 									"comment": "aliases-to-commands",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "basic-principles",
 									"comment": "basic-principles",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "cherry-pick",
 									"comment": "cherry-pick",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "commands",
 									"comment": "commands",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "commit-tree",
 									"comment": "commit-tree",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "gists",
 									"comment": "gists",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "git-folder",
 									"comment": "git-folder",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github-cli",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github-desktop",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github-packages",
 									"comment": "github-packages",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github-ssh",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "github-tokens",
 									"comment": "github-tokens",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "gitignore",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "go-back",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "install",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "merge",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "rebase",
 									"comment": "rebase",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "remote-repo",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "sublime-merge-shortcuts",
 									"comment": "sublime-merge-shortcuts",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "submodules",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "submodules-2",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "tags",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "_Page",
-									"opened": false,
 									"ch": true
 								}
 							]
 						},
 						{
 							"name": "contentsSection",
-							"opened": true,
 							"ch": [
 								{
 									"name": "contentsSection.css"
@@ -500,7 +518,6 @@
 						},
 						{
 							"name": "FT",
-							"opened": true,
 							"ch": [
 								{
 									"name": "ft.css"
@@ -524,7 +541,6 @@
 						},
 						{
 							"name": "funcList",
-							"opened": true,
 							"ch": [
 								{
 									"name": "examples.html"
@@ -548,7 +564,6 @@
 						},
 						{
 							"name": "git-commands",
-							"opened": true,
 							"ch": [
 								{
 									"name": "branch.php"
@@ -569,7 +584,6 @@
 						},
 						{
 							"name": "JS",
-							"opened": true,
 							"ch": [
 								{
 									"name": "script.js"
@@ -578,7 +592,6 @@
 						},
 						{
 							"name": "jsObjectTree",
-							"opened": true,
 							"ch": [
 								{
 									"name": "jsObjectTree.css"
@@ -599,7 +612,6 @@
 						},
 						{
 							"name": "mermaid_PlugKit",
-							"opened": true,
 							"ch": [
 								{
 									"name": "templates.html"
@@ -608,7 +620,6 @@
 						},
 						{
 							"name": "openDetails",
-							"opened": true,
 							"ch": [
 								{
 									"name": "openDetails.js"
@@ -620,16 +631,13 @@
 						},
 						{
 							"name": "PhpConsole",
-							"opened": true,
 							"ch": [
 								{
 									"name": "Dispatcher",
-									"opened": false,
 									"ch": true
 								},
 								{
 									"name": "Storage",
-									"opened": false,
 									"ch": true
 								},
 								{
@@ -669,7 +677,6 @@
 						},
 						{
 							"name": "separateKeySpans",
-							"opened": true,
 							"ch": [
 								{
 									"name": "separateKeySpans.css"

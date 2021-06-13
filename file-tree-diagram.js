@@ -30,7 +30,6 @@ export default class FileTree {
 			elem.classList.add("executed");
 		} else if (jsonError) {
 			const jsonHl = new JsonErrHl(`${ this.classPrefix }-json-err-hl`);
-			// elem.classList.add(`${ this.classPrefix }-json-err-hl`, "calm-clarified-theme");
 			elem.innerHTML = "";
 			const 
 				firstLN = elem.dataset.lineNum || 1,

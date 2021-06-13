@@ -15,6 +15,8 @@ export default class BuildOptions {
 				m.ch[i].parent = m;
 				if (m.iconstyle) 
 					m.ch[i].iconstyle ||= m.iconstyle;
+				if (m["child-iconstyle"])
+					m.ch[i]["self-iconstyle"] ||= m["child-iconstyle"];
 			}
 		}
 		m.iconstyle ||= "colored";

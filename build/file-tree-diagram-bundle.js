@@ -117,6 +117,7 @@ class BuildOptions {
 			}
 		}
 		m.iconstyle ||= "colored";
+		m["self-iconstyle"] ||= m.iconstyle;
 	}
 	addHeader (m) {
 		const 
@@ -148,7 +149,7 @@ class BuildOptions {
 					`class="`,
 						`${ CP }-icon `,
 						`${ CP }-icon_type-${type} `,
-						`${ CP }-icon_style-${m.iconstyle} `,
+						`${ CP }-icon_style-${ m["self-iconstyle"] } `,
 					`"`,
 				`>   </span>`, 
 

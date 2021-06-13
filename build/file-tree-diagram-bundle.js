@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.0.0";
+const version = "1.1.1";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {
@@ -126,7 +126,7 @@ class BuildOptions {
 			CP = this.cssClassPrefix,
 			[type, ext] = (() => {
 				if (m.ch) {
-					if (m.ch.length)
+					if (m.ch instanceof Array)
 						return [`opened-folder`, ""];
 					else 
 						return [`closed-folder`, ""];

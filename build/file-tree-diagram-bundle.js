@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.1";
+const version = "1.1.2";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {
@@ -531,6 +531,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+const version = "1.1.1";
+
 const {
 	token,
 	nToken,
@@ -629,7 +631,7 @@ class JsonErrHlter extends _syntax_highlight_framework_syntax_hl_fk_js__WEBPACK_
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_0__.default)(clPref);
 	}
 
-	get version () { return "1.1.0"; }
+	get version () { return version; }
 
 	getHighlighted (
 		templ, firstLineNum=1, cssClasses="calm-clarified-theme") {
@@ -769,7 +771,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "5.2.0",
+	version: "5.2.1",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
@@ -1094,6 +1096,14 @@ class HighlightAPI {
 		_setCSS(this);
 	}
 
+	/**
+	 * getHighlighted       (template, firstLineNum, cssClasses)
+	 * highlightTextContent (el)
+	 * scrollToFirstError   (el)
+	 * highlight            (el, template, firstLineNum)
+	 * setMainRule          (rule)
+	 */
+
 	getHighlighted       (...args) { return getHighlighted       (this, ...args); }
 	highlightTextContent (...args) { return highlightTextContent (this, ...args); }
 	scrollToFirstError   (...args) { return scrollToFirstError   (this, ...args); }
@@ -1114,12 +1124,12 @@ function getHighlighted(self, template, firstLineNum=1, cssClasses="") {
 			"Argument #3 must be a string, an array, or undefined.\n"+
 			cssClasses+" givin"
 		);
-	self.highlight(el, template, firstLineNum);
+	highlight(self, el, template, firstLineNum);
 	return el;
 }
 
 function highlightTextContent(self, el) {
-	return self.highlight(el, el.textContent, (el.dataset.lineNum*1 + 1) || 1);
+	return highlight(self, el, el.textContent, (el.dataset.lineNum*1 + 1) || 1);
 }
 
 function scrollToFirstError(self, el) {
@@ -1152,7 +1162,7 @@ function highlight(self, contentEl, text, firstLineNum=1) {
 		console.error(`(!)-CATCHED`, e);
 		const lines = text.split("\n");
 		lines.forEach((line, i, a) => {
-			let lineOb = _makeLine(firstLineNum + i);
+			let lineOb = _makeLine(self, firstLineNum + i);
 			let m = line.match(/^(\s*)(.*)/);
 			[lineOb.indent.textContent, lineOb.content.textContent] = [m[1], m[2]];
 			if (i < a.length - 1)
@@ -1183,7 +1193,7 @@ function _renderToHighlight (self, model, firstLineNum=1) {
 	const content = [], nodeStack = [];
 	let lNum = firstLineNum, indentZoneFlag = true, lastLine;
 	nodeStack.last = () => nodeStack[nodeStack.length - 1];
-	content.push(lastLine = _makeLine(lNum ++));
+	content.push(lastLine = _makeLine(self, lNum ++));
 	recur(model);
 	return content;
 	function recur(sb) {

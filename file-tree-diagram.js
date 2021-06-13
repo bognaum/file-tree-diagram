@@ -32,7 +32,7 @@ export default class FileTree {
 			const jsonHl = new JsonErrHl(`${ this.classPrefix }-json-err-hl`);
 			elem.innerHTML = "";
 			const 
-				firstLN = elem.dataset.lineNum || 1,
+				firstLN = getFirstLineNum(elem),
 				errorCodeField = jsonHl.getHighlighted(templ, firstLN);
 			elem.appendChild(errorCodeField);
 			jsonHl.scrollToFirstError(errorCodeField);
@@ -60,4 +60,14 @@ export default class FileTree {
 	testHTML () {
 		return iconManager.testHTML(this.classPrefix);
 	}
+}
+
+function getFirstLineNum(el) {
+	const dln = parseInt(el.dataset.lineNum);
+	if (! dln)
+		return 1;
+	else if (el.nodeName == "PRE")
+		return dln + 1;
+	else 
+		return dln;
 }

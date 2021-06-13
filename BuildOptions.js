@@ -27,7 +27,7 @@ export default class BuildOptions {
 			CP = this.cssClassPrefix,
 			[type, ext] = (() => {
 				if (m.ch) {
-					if (m.ch.length)
+					if (m.ch instanceof Array)
 						return [`opened-folder`, ""];
 					else 
 						return [`closed-folder`, ""];

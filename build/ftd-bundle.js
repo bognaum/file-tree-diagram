@@ -37,12 +37,18 @@ class FileTree {
 	}
 
 	/**
-	 * build    (elem, templ)
-	 * testHTML ()
+	 * buildByTextContent (elem)
+	 * build              (elem, templ)
+	 * testHTML           ()
 	 */
 
-	build    (...args) { return build    (this, ...args); }
-	testHTML (...args) { return testHTML (this, ...args); }
+	buildByTextContent (...args) { return buildByTextContent (this, ...args); }
+	build              (...args) { return build              (this, ...args); }
+	testHTML           (...args) { return testHTML           (this, ...args); }
+}
+
+function buildByTextContent(self, elem) {
+	return build(self, elem, elem.textContent);
 }
 
 function build (self, elem, templ) {

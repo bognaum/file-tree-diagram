@@ -13,12 +13,34 @@ export default class FileTree {
 	}
 
 	build (elem, templ) {
-		elem.dataset.version = version;
-		elem.classList.add(this.classPrefix);
+
+		if (! (elem instanceof HTMLElement))
+			throw new Error([
+				"(!) build(). Argument #1 must be a HTMLElement.",
+				"",
+				elem + " given.",
+				""
+			].join("\n"));
 
 		if (["executing", "executed", "exec-error"].some((v) => elem.classList.contains(v)))
-			throw new Error("(!) Highlighter. Already handled.", elem);
+			throw new Error([
+				"(!) File tree diagram. Already handled.", 
+				"",
+				elem
+			].join("\n"));
+		
+		elem.dataset.fileTreeDiagramVersion = version;
+		elem.classList.add(this.classPrefix);
 		elem.classList.add("executing");
+		elem.innerHTML = "";
+
+		if (typeof templ != "string")
+			throw new Error([
+				"(!) build(). Argument #2 must be a string.",
+				"",
+				templ + " given.",
+				""
+			].join("\n"));
 
 		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
 		if (ob) {

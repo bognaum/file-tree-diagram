@@ -36,79 +36,87 @@ class FileTree {
 		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_3__.default)(classPrefix);
 	}
 
-	build (elem, templ) {
+	/**
+	 * build    (elem, templ)
+	 * testHTML ()
+	 */
 
-		if (! (elem instanceof HTMLElement))
-			throw new Error([
-				"(!) build(). Argument #1 must be a HTMLElement.",
-				"",
-				elem + " given.",
-				""
-			].join("\n"));
+	build    (...args) { return build    (this, ...args); }
+	testHTML (...args) { return testHTML (this, ...args); }
+}
 
-		if (["executing", "executed", "exec-error"].some((v) => elem.classList.contains(v)))
-			throw new Error([
-				"(!) File tree diagram. Already handled.", 
-				"",
-				elem
-			].join("\n"));
-		
-		elem.dataset.fileTreeDiagramVersion = version;
-		elem.classList.add(this.classPrefix);
-		elem.classList.add("executing");
+function build (self, elem, templ) {
+
+	if (! (elem instanceof HTMLElement))
+		throw new Error([
+			"(!) build(). Argument #1 must be a HTMLElement.",
+			"",
+			elem + " given.",
+			""
+		].join("\n"));
+
+	if (["executing", "executed", "exec-error"].some((v) => elem.classList.contains(v)))
+		throw new Error([
+			"(!) File tree diagram. Already handled.", 
+			"",
+			elem
+		].join("\n"));
+	
+	elem.dataset.fileTreeDiagramVersion = version;
+	elem.classList.add(self.classPrefix);
+	elem.classList.add("executing");
+	elem.innerHTML = "";
+
+	if (typeof templ != "string")
+		throw new Error([
+			"(!) build(). Argument #2 must be a string.",
+			"",
+			templ + " given.",
+			""
+		].join("\n"));
+
+	const {object :ob, error :jsonError} = _tryParseJSON(templ);
+	if (ob) {
+		elem.innerHTML = (0,_draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__.default)(
+			ob, 
+			new _BuildOptions_js__WEBPACK_IMPORTED_MODULE_0__.default(self.classPrefix)
+		).result;
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("executed");
+	} else if (jsonError) {
+		const jsonHl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default(`${ self.classPrefix }-json-err-hl`);
 		elem.innerHTML = "";
-
-		if (typeof templ != "string")
-			throw new Error([
-				"(!) build(). Argument #2 must be a string.",
-				"",
-				templ + " given.",
-				""
-			].join("\n"));
-
-		const {object :ob, error :jsonError} = this.tryParseJSON(templ);
-		if (ob) {
-			elem.innerHTML = (0,_draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__.default)(
-				ob, 
-				new _BuildOptions_js__WEBPACK_IMPORTED_MODULE_0__.default(this.classPrefix)
-			).result;
-			elem.classList.remove("executing", "executed", "exec-error");
-			elem.classList.add("executed");
-		} else if (jsonError) {
-			const jsonHl = new _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__.default(`${ this.classPrefix }-json-err-hl`);
-			elem.innerHTML = "";
-			const 
-				firstLN = getFirstLineNum(elem),
-				errorCodeField = jsonHl.getHighlighted(templ, firstLN);
-			elem.appendChild(errorCodeField);
-			jsonHl.scrollToFirstError(errorCodeField);
-			elem.classList.remove("executing", "executed", "exec-error");
-			elem.classList.add("exec-error");
-			console.error(`(!)`, jsonError);
-		} else {
-			throw new Error();
-		}
-	}
-
-	tryParseJSON (json) {
-		try {
-			return {
-				object: JSON.parse(json)
-			};
-		} catch (err) {
-			return {
-				text: json,
-				error: err,
-			}
-		}
-	}
-
-	testHTML () {
-		return _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__.default.testHTML(this.classPrefix);
+		const 
+			firstLN = _getFirstLineNum(elem),
+			errorCodeField = jsonHl.getHighlighted(templ, firstLN);
+		elem.appendChild(errorCodeField);
+		jsonHl.scrollToFirstError(errorCodeField);
+		elem.classList.remove("executing", "executed", "exec-error");
+		elem.classList.add("exec-error");
+		console.error(`(!)`, jsonError);
+	} else {
+		throw new Error();
 	}
 }
 
-function getFirstLineNum(el) {
+function testHTML (self) {
+	return _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__.default.testHTML(self.classPrefix);
+}
+
+function _tryParseJSON (json) {
+	try {
+		return {
+			object: JSON.parse(json)
+		};
+	} catch (err) {
+		return {
+			text: json,
+			error: err,
+		}
+	}
+}
+
+function _getFirstLineNum(el) {
 	const dln = parseInt(el.dataset.lineNum);
 	if (! dln)
 		return 1;

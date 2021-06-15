@@ -2,7 +2,7 @@
   "name": "file-tree-diagram",
   "version": "1.0.0",
   "description": "",
-  "main": "file-tree-diagram.js",
+  "main": "ftd.js",
   "directories": {
     "test": "tests"
   },

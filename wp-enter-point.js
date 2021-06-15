@@ -1,3 +1,3 @@
-const FTD = require("./file-tree-diagram.js").default;
+const FTD = require("./ftd.js").default;
 
 module.exports = FTD;

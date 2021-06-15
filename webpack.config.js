@@ -5,7 +5,7 @@ module.exports = {
 	entry: './wp-enter-point.js',
 	output: {
 		path: path.resolve(__dirname, 'build'),
-		filename: 'file-tree-diagram-bundle.js',
+		filename: 'ftd-bundle.js',
 		library: "FileTreeDiagram",
 	},
 	mode: 'none', 

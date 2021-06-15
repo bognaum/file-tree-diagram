@@ -4,7 +4,7 @@ import JsonErrHl    from "./json-err-hl/json-err-hl.js";
 import setStyle     from "./set-style.js";
 import iconManager  from "./icon-manager.js";
 
-const version = "1.1.4";
+const version = "2.0.0";
 
 export default class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {

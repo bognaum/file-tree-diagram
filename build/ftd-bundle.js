@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "1.1.4";
+const version = "2.0.0";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {
@@ -2512,4 +2512,4 @@ function eHTML(code, shell=null) {
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=file-tree-diagram-bundle.js.map
+//# sourceMappingURL=ftd-bundle.js.map

@@ -830,8 +830,10 @@ export default function setStyle(clPref) {
 		  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAC8UlEQVRo3u1ZSWgTURiOuydxXw7iBupBkF70KHpQQfAgFCoWqXQmiUqUenA5CPXgRRAkNW0yCVaxIubkQRGkUA9aks5M6kLRqgheFPcFRK3W8fuToQ4lHad5WwN58JM2Ifm/773v/duEQoJXJGlFwynrU7Sjf3mo2la0w1wH8L9gDuxi1RHA7ne54Mn+EKGqAX8g0bcYoIc8BBzdsK7TZ82ZwjItnVs0oQDXZ7NTdMPeBqAnwym7LZwyu73gPSTuun+3TxjwALMVdr8cYB97oRx4a2vPVOg8MU7gI0YyUxhhHiyEHG5XCt61zUrAA/gJOP/MCN6JJO1G6eD3t5trWIH/MzOiIrYf40fA0lTIJ8OLACS0S8UJJHgRQGauUxHzNU4Efsbiz2YouMQP58D5B3YC9h2VmXcHKwHcpcPKCDRneudSKcAin30XCgtU7f4q2CCjfNpUNSh1APCOUT5fYPOlg2/q7JkJx4+rMvuWpGOeZk9c1rWQ40xS1dv+5hB5MkoIwHmaY/1zXHqryCdxeU/CbJBY+xTW8wTv2jd0Y0slVZ9mgwACFI1SsqrPmBgC1vemzv7ZMi7wIUEEEFbNvTJO4JQoAgirlwSDt7fD0bAoArCC0LEJHHwVCJ7sTQAJL4HUdpeUYJ7RjfzqoKXDUcHgi4WdX+EIid2kofCo7zwJenmfSiDwuszYZiXK7as+33kZlMCwaALY4by3ScL/Z0dPtD32HpbFyWwISuCt+BMwu3XD3oMdT/pM+gbdZDptvOXzLQkS8rOP1DfXZwemVxpCG//jgI70hwDgQ4g45w6ez89jHJ07k0sPKopAyzUnhpa2t/DoEzy/2aWl8yu45YJYPDeLnjCOURLvhMx6edREsCtCpnT44Y1jOH3kPk5iAZ6j/lhoQUcyootUcjaSUGikslY3+jZVClzJ00qSEzUhRKr4Bnpb7GALAD13cwZJ4RVsAHfnHl5v4PPL2IA4tH2EpnmUpJT0xLVVW7VVW8LWX3alf1C7l0sgAAAAAElFTkSuQmCC"); }
 
 		.file-tree-diagram {
+		  margin: 10px 5px;
+		  padding: 10px 5px;
 		  white-space: pre;
-		  font-family: consolas; }
+		  font-family: consolas, monospace; }
 		  .file-tree-diagram .file-tree-diagram__branch {
 		    color: #999; }
 		  .file-tree-diagram .file-tree-diagram__comment {

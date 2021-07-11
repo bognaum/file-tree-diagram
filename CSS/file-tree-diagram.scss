@@ -13,8 +13,10 @@ $cl_pref: "file-tree-diagram";
 @import "typed-icons-48";
 
 .#{$cl_pref} {
+	margin: 10px 5px;
+	padding: 10px 5px;
 	white-space: pre;
-	font-family: consolas;
+	font-family: consolas, monospace;
 	.#{$cl_pref}__header {
 	}
 	.#{$cl_pref}__branch {

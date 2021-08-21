@@ -25,6 +25,7 @@ $cl_pref: "file-tree-diagram";
 	.#{$cl_pref}__comment {
 		// color: #f77;
 		color: #999;
-		font-style: italic;
+		font-weight: normal;
+		text-shadow: 0 0 1px #999;
 	}
 }

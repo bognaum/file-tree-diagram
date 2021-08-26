@@ -61,7 +61,8 @@ export default class BuildOptions {
 				if_ (m.comment) (
 					`<span class="${ CP }__comment">`,
 						`<span class="${ CP }__comment-align-indent">`,
-							"╶"+commentAlignLiner+"╴",
+							" "+commentAlignLiner+"─ ",
+							// "╶"+commentAlignLiner+"╴",
 						`</span>`,
 						`${ m.comment || "" }`,
 					`</span>`

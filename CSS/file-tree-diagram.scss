@@ -17,15 +17,14 @@ $cl_pref: "file-tree-diagram";
 	padding: 10px 5px;
 	white-space: pre;
 	font-family: consolas, monospace;
-	.#{$cl_pref}__header {
-	}
+	font-style: italic;
+	.#{$cl_pref}__header {}
 	.#{$cl_pref}__branch {
 		color: #999;
 	}
 	.#{$cl_pref}__comment {
-		// color: #f77;
 		color: #999;
 		font-weight: normal;
-		text-shadow: 0 0 1px #999;
+		font-style: normal;
 	}
 }

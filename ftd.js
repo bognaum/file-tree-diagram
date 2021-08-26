@@ -1,7 +1,7 @@
 import BuildOptions from "./BuildOptions.js";
 import assemblyTree from "./draw-data-tree.js";
 import JsonErrHl    from "./json-err-hl/json-err-hl.js";
-import setStyle     from "./set-style.js";
+import setStyle     from "./CSS/file-tree-diagram.scss.js";
 import iconManager  from "./icon-manager.js";
 
 const version = "2.1.1";

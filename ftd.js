@@ -21,6 +21,9 @@ export default class FileTree {
 	buildByTextContent (...args) { return buildByTextContent (this, ...args); }
 	build              (...args) { return build              (this, ...args); }
 	testHTML           (...args) { return testHTML           (this, ...args); }
+
+	get        version () {return version;}
+	static get version () {return version;}
 }
 
 function buildByTextContent(self, elem) {

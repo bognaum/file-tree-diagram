@@ -20,7 +20,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BuildOptions_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 /* harmony import */ var _draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4);
 /* harmony import */ var _json_err_hl_json_err_hl_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(5);
-/* harmony import */ var _CSS_file_tree_diagram_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(12);
+/* harmony import */ var _CSS_file_tree_diagram_scss_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(13);
 /* harmony import */ var _icon_manager_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3);
 
 
@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "2.1.1";
+const version = "2.1.3";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {
@@ -45,6 +45,9 @@ class FileTree {
 	buildByTextContent (...args) { return buildByTextContent (this, ...args); }
 	build              (...args) { return build              (this, ...args); }
 	testHTML           (...args) { return testHTML           (this, ...args); }
+
+	get        version () {return version;}
+	static get version () {return version;}
 }
 
 function buildByTextContent(self, elem) {
@@ -573,12 +576,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ JsonErrHlter)
 /* harmony export */ });
-/* harmony import */ var _set_style_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
+/* harmony import */ var _CSS_themes_scss_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6);
 /* harmony import */ var _syntax_highlight_framework_syntax_hl_fk_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7);
 
 
 
-const version = "1.1.3";
+const version = "1.1.5";
 
 const {
 	token,
@@ -637,7 +640,17 @@ const
 			return r.string(pc);
 		}),
 		slashed : domain("slashed", function(pc) {
-			return token(/\\[\\ntbu'"`]/y)(pc);
+			return token(
+				'\\"'         ,
+				"\\\\"        , 
+				"\\/"         , 
+				"\\b"         ,
+				"\\f"         ,
+				"\\n"         ,
+				"\\r"         ,
+				"\\t"         ,
+				/\\u\d\d\d\d/y,
+			)(pc);
 		}),
 		number          : domain("number", function(pc) {
 			return token(/\b\d+\.|\.\d+\b|\b\d+\.?\d*\b/y)(pc);
@@ -663,8 +676,8 @@ const
 		string        : rule(function(pc) {
 			return seq(
 				token('"'),
-				q(alter(d.slashed, nToken('"')), "*"),
-				token('"'),
+				q(alter(d.slashed, nToken('"', "\n", "\\")), "*"),
+				token('"').catch("String: invalid symbol"),
 			)(pc);
 		}),
 		space           : rule(function(pc) {
@@ -675,7 +688,7 @@ const
 class JsonErrHlter extends _syntax_highlight_framework_syntax_hl_fk_js__WEBPACK_IMPORTED_MODULE_1__.default.Highlighter {
 	constructor (clPref="json-err-hl") {
 		super(__main_, clPref);
-		(0,_set_style_js__WEBPACK_IMPORTED_MODULE_0__.default)(clPref);
+		(0,_CSS_themes_scss_js__WEBPACK_IMPORTED_MODULE_0__.default)(clPref);
 	}
 
 	get version () { return version; }
@@ -698,85 +711,110 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 function setStyle(clPref) {
 
-	const cssCode = `
-	.json-err-hl.calm-theme {
-	  background-color: #222; }
-	  .json-err-hl.calm-theme .json-err-hl__line-text {
-	    color: #eee; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .string {
-	      color: #ddc; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .string_v {
-	      color: #ddc; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .string_n {
-	      color: #78a; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .slashed {
-	      color: #f90; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .number {
-	      color: #f90; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text .bool {
-	      color: #f90; }
-	    .json-err-hl.calm-theme .json-err-hl__line-text ._null {
-	      color: #98f; }
+	const cssCode = `.json-err-hl.calm-theme {
+  background-color: #222;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text {
+  color: #eee;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .string {
+  color: #ddc;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .string_v {
+  color: #ddc;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .string_n {
+  color: #78a;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .slashed {
+  color: #f90;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .number {
+  color: #f90;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text .bool {
+  color: #f90;
+}
+.json-err-hl.calm-theme .json-err-hl__line-text ._null {
+  color: #98f;
+}
 
-	.json-err-hl.calm-clarified-theme .json-err-hl__line .json-err-hl__line-number {
-	  background-color: #444; }
+.json-err-hl.calm-clarified-theme .json-err-hl__line .json-err-hl__line-number {
+  background-color: #444;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text {
+  color: #eee;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .string {
+  color: #ddc;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_v {
+  color: #ddc;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_n {
+  color: #78a;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .bool {
+  color: #fb6;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .number {
+  color: #fb6;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text .slashed {
+  color: #fb6;
+}
+.json-err-hl.calm-clarified-theme .json-err-hl__line-text ._null {
+  color: #98f;
+}
 
-	.json-err-hl.calm-clarified-theme .json-err-hl__line-text {
-	  color: #eee; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string {
-	    color: #ddc; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_v {
-	    color: #ddc; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .string_n {
-	    color: #78a; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .bool {
-	    color: #fb6; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .number {
-	    color: #fb6; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text .slashed {
-	    color: #fb6; }
-	  .json-err-hl.calm-clarified-theme .json-err-hl__line-text ._null {
-	    color: #98f; }
+.json-err-hl.monokai-theme {
+  background-color: #333;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .string_n {
+  color: #3bd;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .string {
+  color: #da5;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .string_v {
+  color: #da5;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .slashed {
+  color: #98f;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .number {
+  color: #98f;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text .bool {
+  color: #98f;
+}
+.json-err-hl.monokai-theme .json-err-hl__line-text ._null {
+  color: #e48;
+}
 
-	.json-err-hl.monokai-theme {
-	  background-color: #333; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .string_n {
-	    color: #3bd; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .string {
-	    color: #da5; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .string_v {
-	    color: #da5; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .slashed {
-	    color: #98f; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .number {
-	    color: #98f; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text .bool {
-	    color: #98f; }
-	  .json-err-hl.monokai-theme .json-err-hl__line-text ._null {
-	    color: #e48; }
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_n {
+  color: #3bd;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string {
+  color: #da5;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_v {
+  color: #da5;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .slashed {
+  color: #98f;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .number {
+  color: #98f;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .bool {
+  color: #98f;
+}
+.json-err-hl.monokai-clarified-theme .json-err-hl__line-text ._null {
+  color: #e48;
+}
 
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_n {
-	  color: #3bd; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string {
-	  color: #da5; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .string_v {
-	  color: #da5; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .slashed {
-	  color: #98f; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .number {
-	  color: #98f; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text .bool {
-	  color: #98f; }
-
-	.json-err-hl.monokai-clarified-theme .json-err-hl__line-text ._null {
-	  color: #e48; }
-
-	 `.replaceAll(/json-err-hl/g, clPref);
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9qc29uLWVyci1obC9jc3MvdGhlbWVzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUE7RUFDQzs7QUFDQTtFQUNDOztBQUNBO0VBQWM7O0FBQ2Q7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7O0FBQ2Q7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7OztBQU1mO0VBQ0M7O0FBR0Q7RUFDQzs7QUFDQTtFQUFnQjs7QUFDaEI7RUFBZ0I7O0FBQ2hCO0VBQWdCOztBQUNoQjtFQUFnQjs7QUFDaEI7RUFBZ0I7O0FBQ2hCO0VBQWdCOztBQUNoQjtFQUFnQjs7O0FBSWxCO0VBQ0M7O0FBR0M7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7O0FBQ2Q7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7O0FBQ2Q7RUFBYzs7O0FBUWQ7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7O0FBQ2Q7RUFBYzs7QUFDZDtFQUFjOztBQUNkO0VBQWM7O0FBQ2Q7RUFBYyIsImZpbGUiOiJ0aGVtZXMuc2Nzcy5qcyJ9 */`.replaceAll(/\bjson-err-hl/g, clPref);
 
 	const styleClassName = `${clPref}__theme-style`;
 
@@ -818,7 +856,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-	version: "5.2.1",
+	version: "5.3.1",
 	describeAPI: _describeAPI_js__WEBPACK_IMPORTED_MODULE_0__.default,
 	Highlighter: _Highlighter_js__WEBPACK_IMPORTED_MODULE_1__.default,
 });
@@ -1047,25 +1085,25 @@ function rule(callb) {
 	return _rule_;
 }
 
-function token(templ) {
+function token(...templs) {
 	const _token_ = function _token_(pc) {
-		return pc.match(templ);
+		return pc.match(...templs);
 	}
 	Object.setPrototypeOf(_token_, Analyzer_proto);
 	return _token_;
 }
 
-function nToken(templ) {
+function nToken(...templs) {
 	const _notToken_ = function _notToken_(pc) {
-		return pc.notMatch(templ);
+		return pc.notMatch(...templs);
 	}
 	Object.setPrototypeOf(_notToken_, Analyzer_proto);
 	return _notToken_;
 }
 
-function spToken(templ) {
+function spToken(...templs) {
 	const _space_wrapped_token_ = function(pc) {
-		return seq(token(/\s+/y).q("*"), token(templ), token(/\s+/y).q("*"),)(pc);
+		return seq(token(/\s+/y).q("*"), token(...templs), token(/\s+/y).q("*"),)(pc);
 	}
 	Object.setPrototypeOf(_space_wrapped_token_, Analyzer_proto);
 	return _space_wrapped_token_;
@@ -1133,6 +1171,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (/* binding */ HighlightAPI)
 /* harmony export */ });
 /* harmony import */ var _ParseContext_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(10);
+/* harmony import */ var _CSS_highlighter_scss_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
+
 
 
 class HighlightAPI {
@@ -1140,7 +1180,7 @@ class HighlightAPI {
 	constructor (mainRule, clPref="syntax-hl-fk") {
 		this.mainRule = mainRule;
 		this.clPref   = clPref  ;
-		_setCSS(this);
+		(0,_CSS_highlighter_scss_js__WEBPACK_IMPORTED_MODULE_1__.default)(this.clPref);
 	}
 
 	/**
@@ -1159,24 +1199,26 @@ class HighlightAPI {
 }
 
 
-function getHighlighted(self, template, firstLineNum=1, cssClasses="") {
+function getHighlighted(self, text, firstLineNum=1, cssClasses="") {
 	const el = document.createElement("div");
 	if (typeof cssClasses == "string")
 		el.className += " " + cssClasses;
 	else if (cssClasses instanceof Array) 
-		el.classList.add(cssClasses);
+		el.classList.add(...cssClasses);
 	else 
-		throw new Error(
-			"(!) - getHighlighted(). "+
-			"Argument #3 must be a string, an array, or undefined.\n"+
-			cssClasses+" givin"
-		);
-	highlight(self, el, template, firstLineNum);
+		throw new Error([
+			"(!) getHighlighted(). ",
+			"Argument #3 must be a string, an array of strings, or undefined.",
+			"",
+			cssClasses+" given.",
+			""
+		].join("\n"));
+	highlight(self, el, text, firstLineNum);
 	return el;
 }
 
 function highlightTextContent(self, el) {
-	return highlight(self, el, el.textContent, (el.dataset.lineNum*1 + 1) || 1);
+	return highlight(self, el, el.textContent, getFirstLineNum(el));
 }
 
 function scrollToFirstError(self, el) {
@@ -1192,12 +1234,33 @@ function scrollToFirstError(self, el) {
 }
 
 function highlight(self, contentEl, text, firstLineNum=1) {
-	contentEl.classList.add(self.clPref);
+	if (! (contentEl instanceof HTMLElement))
+		throw new Error([
+			"(!) highlight(). Argument #1 must be a HTMLElement.",
+			"",
+			contentEl + " given.",
+			""
+		].join("\n"));
+
 	if (["executing", "executed", "exec-error"].some((v) => contentEl.classList.contains(v)))
-		throw new Error("(!) Highlighter. Already handled.", contentEl);
+		throw new Error([
+			"(!) Highlighter. Already handled.", 
+			"",
+			contentEl
+		].join("\n"));
 	
+	contentEl.classList.add(self.clPref);
 	contentEl.classList.add("executing");
 	contentEl.innerHTML = "";
+
+	if (typeof text != "string")
+		throw new Error([
+			"(!) highlight(). Argument #2 must be a string.",
+			"",
+			text + " given.",
+			""
+		].join("\n"));
+
 	try {
 		const
 			model    = _buildModel(self, text),
@@ -1335,75 +1398,21 @@ function _makeLine(self, num) {
 	) 
 }
 
-function _setCSS(self) {
-	
-	const cssCode = `
-		.syntax-hl-fk {
-		  text-align: left;
-		  white-space: pre;
-		  background-color: #444;
-		  color: #ccc;
-		  -moz-tab-size: 4;
-		  tab-size: 4;
-		  overflow: auto;
-		  max-height: 500px;
-		  padding: 20px;
-		  font-family: consolas, monospace; }
-		  .syntax-hl-fk *::selection {
-		    background-color: #000;
-		    background-color: rgba(120, 120, 120, 0.5); }
-		  .syntax-hl-fk .syntax-hl-fk__line {
-		    margin-left: -20px; }
-		    .syntax-hl-fk .syntax-hl-fk__line > * {
-		      display: table-cell; }
-		    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number {
-		      width: 50px;
-		      min-width: 50px;
-		      max-width: 50px;
-		      text-align: right;
-		      background-color: #333;
-		      padding-right: 10px;
-		      margin-right: 5px;
-		      transition: all .2s; }
-		      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number:before {
-		        content: attr(data-line-number) ""; }
-		    .syntax-hl-fk .syntax-hl-fk__line span.syntax-hl-fk__line-number.error {
-		      color: #fff;
-		      background-color: #e48; }
-		    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-indent {
-		      padding-left: 5px; }
-		    .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text {
-		      padding-left: 20px;
-		      white-space: pre-wrap;
-		      word-break: break-word; }
-		      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text .error {
-		        color: #fff;
-		        background-color: #e48;
-		        box-shadow: inset 0 0 2px #fff; }
-		      .syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text:before {
-		        content: "";
-		        margin-left: -20px; }
-
-	`.replace(/syntax-hl-fk/g, self.clPref);
-
-	const styleClassName = `${self.clPref}__base-style`;
-
-	const styleAlreadyExists = [].some.call(
-		document.querySelectorAll(`style.${styleClassName}`), 
-		(v) => v.textContent === cssCode
-	);
-
-	if (! styleAlreadyExists) {
-		const style = _evaluate(`<style class="${styleClassName}"></style>`);
-		style.textContent = cssCode;
-		document.head.appendChild(style);
-	}
-}
-
 function _evaluate (code) {
 	const shell = document.createElement("div");
 	shell.innerHTML = code;
 	return shell.children[0];
+}
+
+
+function getFirstLineNum(el) {
+	const dln = parseInt(el.dataset.lineNum);
+	if (! dln)
+		return 1;
+	else if (el.nodeName == "PRE")
+		return dln + 1;
+	else 
+		return dln;
 }
 
 /***/ }),
@@ -1433,37 +1442,30 @@ class ParseContext {
 		this.monitor = pc.monitor;
 		// this.debugDomain = pc.debugDomain;
 	}
-	match (templ) {
-		const {mSubstr, len} = this._getMatchSubstr(templ);
-
-		if (mSubstr) {
-			this.i += len;
-			push(this.mSlot, mSubstr);
-			this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
-			return mSubstr;
-		} else
-			return "";
+	match (...templs) {
+		for (let t of templs) {
+			const {mSubstr, len} = this._getMatchSubstr(t);
+			if (mSubstr) {
+				this.i += len;
+				push(this.mSlot, mSubstr);
+				this.monitor = this.i+ " : "+this.text.substr(this.i, 20)
+				return mSubstr;
+			}
+		} 
+		return "";
 	}
-	notMatch (templ) {
-		const {mSubstr, len} = this._getMatchSubstr(templ);
-
-		if (mSubstr) {
-			return false;
-		} else {
-			const simbol = this.text[this.i];
-			push(this.mSlot, simbol);
-			this.i += 1;
-			this.monitor = this.i+ " : "+this.text.substr(this.i, 20);
-			return simbol;
+	notMatch (...templs) {
+		for (let t of templs) {
+			const {mSubstr, len} = this._getMatchSubstr(t);
+			if (mSubstr) 
+				return false;
 		}
 
-
-		const hpc = this.createHypo();
-		if (! hpc.match(templ)) {
-			this.match(this.text[this.i]);
-			return true;
-		} else
-			return false;
+		const simbol = this.text[this.i];
+		push(this.mSlot, simbol);
+		this.i += 1;
+		this.monitor = this.i+ " : "+this.text.substr(this.i, 20);
+		return simbol;
 	}
 	createHypo () {
 		const 
@@ -1583,6 +1585,101 @@ class ModelNode {
 
 /***/ }),
 /* 12 */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ setStyle)
+/* harmony export */ });
+function setStyle(clPref) {
+
+	const cssCode = `.syntax-hl-fk {
+  text-align: left;
+  white-space: pre;
+  background-color: #444;
+  color: #ccc;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  overflow: auto;
+  max-height: 500px;
+  padding: 20px;
+  font-family: consolas, monospace;
+}
+.syntax-hl-fk *::selection {
+  background-color: #000;
+  background-color: rgba(120, 120, 120, 0.5);
+}
+.syntax-hl-fk .syntax-hl-fk__line {
+  margin-left: -20px;
+}
+.syntax-hl-fk .syntax-hl-fk__line > * {
+  display: table-cell;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number {
+  width: 50px;
+  min-width: 50px;
+  max-width: 50px;
+  text-align: right;
+  background-color: #333;
+  padding-right: 10px;
+  margin-right: 5px;
+  transition: all 0.2s;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-number:before {
+  content: attr(data-line-number) "";
+}
+.syntax-hl-fk .syntax-hl-fk__line span.syntax-hl-fk__line-number.error {
+  color: #fff;
+  background-color: #e48;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-indent {
+  padding-left: 5px;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text {
+  padding-left: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text .error {
+  color: #fff;
+  background-color: #e48;
+  box-shadow: inset 0 0 2px #fff;
+}
+.syntax-hl-fk .syntax-hl-fk__line .syntax-hl-fk__line-text:before {
+  content: "";
+  margin-left: -20px;
+}
+
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL0Q6L0dpdEh1Yi1teS9zeW50YXgtaGlnaGxpZ2h0LWZyYW1ld29yay9jc3MvaGlnaGxpZ2h0ZXIuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFDQTtFQUNDO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUVBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7RUFDQTs7QUFHRDtFQUNDOztBQUNBO0VBQ0M7O0FBRUQ7RUFDQztFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0E7RUFDQTtFQUNBOztBQUNBO0VBQ0M7O0FBR0Y7RUFDQztFQUFhOztBQUVkO0VBQ0M7O0FBRUQ7RUFDQztFQUNBO0VBQ0E7O0FBQ0E7RUFDQztFQUNBO0VBQ0E7O0FBRUQ7RUFDQztFQUNBIiwiZmlsZSI6ImhpZ2hsaWdodGVyLnNjc3MuanMifQ== */`.replaceAll(/syntax-hl-fk/g, clPref);
+
+	const styleClassName = `${clPref}__theme-style`;
+
+	const styleAlreadyExists = [].some.call(
+		document.querySelectorAll(`style.${styleClassName}`), 
+		(v) => v.textContent === cssCode
+	);
+
+	if (! styleAlreadyExists) {
+		const style = eHTML(`<style class="${styleClassName}"></style>`);
+		style.textContent = cssCode;
+		document.head.appendChild(style);
+	}
+}
+
+
+function eHTML(code, shell=null) {
+	const _shell = 
+		! shell                  ? document.createElement("div") :
+		typeof shell == "string" ? document.createElement(shell) :
+		typeof shell == "object" ? shell :
+			null;
+	_shell.innerHTML = code;
+	return _shell.children[0];
+}
+
+/***/ }),
+/* 13 */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";

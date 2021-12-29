@@ -62,10 +62,11 @@ function build (self, elem, templ) {
 
 	const {object :ob, error :jsonError} = _tryParseJSON(templ);
 	if (ob) {
-		elem.innerHTML = assemblyTree(
+		const dom = assemblyTree(
 			ob, 
 			new BuildOptions(self.classPrefix)
-		).result;
+		).shell;
+		elem.append(dom)
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("executed");
 	} else if (jsonError) {

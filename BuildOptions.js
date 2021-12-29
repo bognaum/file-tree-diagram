@@ -3,7 +3,7 @@ import iconManager from "./icon-manager.js";
 export default class BuildOptions {
 	constructor (cssClassPrefix="file-tree") {
 		this.cssClassPrefix = cssClassPrefix
-		this.result = "";
+		this.shell = new DocumentFragment();
 		this.chProp = "ch";
 	}
 	newRow (m) {
@@ -42,7 +42,7 @@ export default class BuildOptions {
 			})(),
 			commentAlignLiner = "─".repeat((m.aLongestName - m.name.length) || 0);
 
-		this.result += [
+		this.shell.append(eHTML([
 			`<span `,
 				`class="${ CP }__header"`,
 				`data-type="${ type }"`,
@@ -68,7 +68,7 @@ export default class BuildOptions {
 					`</span>`
 				),
 			`</span>`,
-		].join("");
+		].join("")));
 	}
 	addBranchEl (type) {
 		const 
@@ -85,13 +85,29 @@ export default class BuildOptions {
 				e: "   ",
 			};
 		const text = slim[type] || "err";
-		this.result += 
+		this.shell.append(eHTML(
 			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"
-				>${ slim[type] || "err" }</span>`;
+				>${ slim[type] || "err" }</span>`
+		));
 	}
-	endOfRow (m) {this.result += "\n";}
+	endOfRow (m) {this.shell.append("\n");}
 }
 
 function if_ (cond) {
 	return cond ? (...args) => args.join("") : () => "";
+}
+
+function eHTML(code, shell=null) {
+	const _shell = 
+		! shell                  ? document.createElement("div") :
+		typeof shell == "string" ? document.createElement(shell) :
+		typeof shell == "object" ? shell :
+			null;
+	_shell.innerHTML = code;
+	return _shell.children[0];
+}
+
+function eHTMLDF(code) {
+	const _shell = document.createElement("template");
+	return _shell.innerHTML = code, _shell.content;
 }

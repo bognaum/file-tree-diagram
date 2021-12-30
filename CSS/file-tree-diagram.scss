@@ -19,9 +19,10 @@ $cl_pref: "file-tree-diagram";
 	font-family: consolas, monospace;
 	font-style: italic;
 	/*.#{$cl_pref}-ch-list {
-		white-space: pre;
-	}*/
-	.#{$cl_pref}__header {
+		overflow: hidden;
+		transition: height .2s linear;
+	}
+*/	.#{$cl_pref}__header {
 		.#{$cl_pref}-fold-switcher,
 		.#{$cl_pref}-f-s-cap {
 			font-style: normal;
@@ -32,7 +33,9 @@ $cl_pref: "file-tree-diagram";
 			// vertical-align: middle;
 			overflow: hidden;
 			svg {
-				path {}
+				path {
+					transition: transform .2s linear;
+				}
 			}
 		}
 	}

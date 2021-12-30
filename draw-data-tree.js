@@ -19,13 +19,20 @@ export default function assemblyTree(treeModel, o) {
 		mArr.push(mNode);
 
 		if (mNode[chProp]) {
-			let lastChIndex = mNode[chProp].length - 1
+			let lastChIndex = mNode[chProp].length - 1;
+
+			if (o.newChList)
+				o.newChList(mNode);
+
 			for (let i = 0, len = mNode[chProp].length; i < len; i++) {
-				if (i < len - 1)
+				if (i < len - 1) 
 					recursive(depth + 1, mask+"0", mNode[chProp][i]);
-				else if (i == len - 1)
+				else if (i == len - 1) 
 					recursive(depth + 1, mask+"1", mNode[chProp][i]);
 			}
+
+			if (o.endOfChList)
+				o.endOfChList(mNode);
 		}
 
 		mArr.pop();

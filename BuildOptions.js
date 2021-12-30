@@ -5,6 +5,19 @@ export default class BuildOptions {
 		this.cssClassPrefix = cssClassPrefix
 		this.shell = new DocumentFragment();
 		this.chProp = "ch";
+		this.mountStack = [this.shell];
+	}
+	get currMount () {return this.mountStack[this.mountStack.length - 1]}
+	newChList (m) {
+		const 
+			CP = this.cssClassPrefix,
+			chList = eHTML(`<div class="${ CP }-ch-list"></div>`);
+		m.chlistDom = chList; 
+		this.currMount.append(chList);
+		this.mountStack.push(chList);
+	}
+	endOfChList (m) {
+		this.mountStack.pop();
 	}
 	newRow (m) {
 		if (m.ch) {
@@ -42,7 +55,7 @@ export default class BuildOptions {
 			})(),
 			commentAlignLiner = "─".repeat((m.aLongestName - m.name.length) || 0);
 
-		this.shell.append(eHTML([
+		const dom = eHTML([
 			`<span `,
 				`class="${ CP }__header"`,
 				`data-type="${ type }"`,
@@ -55,7 +68,7 @@ export default class BuildOptions {
 						`${ CP }-icon_style-${ m["self-iconstyle"] } `,
 					`"`,
 				`>   </span>`, 
-
+				m.ch?.length ? getFoldSwitcher(CP) : getFoldSwitcherCap(CP), 
 				`<span class="${ CP }__name">${ m.name }</span>`,
 
 				if_ (m.comment) (
@@ -68,7 +81,24 @@ export default class BuildOptions {
 					`</span>`
 				),
 			`</span>`,
-		].join("")));
+		].join(""));
+		const 
+			foldSwitcher        = dom.querySelector(`.${ CP }-fold-switcher`),
+			foldSwitcher__arrow = dom.querySelector(`.${ CP }-fold-switcher__arrow`);
+
+		this.currMount.append(dom);
+
+		if (foldSwitcher) {
+			foldSwitcher.onclick = function(ev) {
+				m.folded = ! m.folded;
+				m.chlistDom.hidden = m.folded;
+				if (m.folded) {
+					foldSwitcher__arrow.setAttribute("transform", "");
+				} else {
+					foldSwitcher__arrow.setAttribute("transform", "rotate(90 207 207)");
+				}
+			}
+		}
 	}
 	addBranchEl (type) {
 		const 
@@ -85,13 +115,33 @@ export default class BuildOptions {
 				e: "   ",
 			};
 		const text = slim[type] || "err";
-		this.shell.append(eHTML(
+		this.currMount.append(eHTML(
 			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"
 				>${ slim[type] || "err" }</span>`
 		));
 	}
-	endOfRow (m) {this.shell.append("\n");}
+	endOfRow (m) {this.currMount.append("\n");}
 }
+
+function getFoldSwitcher(CP) {
+	return [
+		`<span class="${ CP }-fold-switcher">`,
+			`<svg width=".7em" height=".7em" x="0px" y="0px" viewBox="0 0 415.346 415.346">`,
+				`<g>`,
+					`<path class="${ CP }-fold-switcher__arrow" `,
+					`fill="#999" d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697`,
+						`c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z" transform="rotate(90 207 207)"/>`,
+				`</g>`,
+			`</svg>`,
+			` `,
+		`</span>`,
+	].join("");
+} 
+
+function getFoldSwitcherCap(CP) {
+	return `<span class="${ CP }-f-s-cap">─╴</span>`;
+}
+
 
 function if_ (cond) {
 	return cond ? (...args) => args.join("") : () => "";

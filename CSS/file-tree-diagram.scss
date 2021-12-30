@@ -18,7 +18,24 @@ $cl_pref: "file-tree-diagram";
 	white-space: pre;
 	font-family: consolas, monospace;
 	font-style: italic;
-	.#{$cl_pref}__header {}
+	/*.#{$cl_pref}-ch-list {
+		white-space: pre;
+	}*/
+	.#{$cl_pref}__header {
+		.#{$cl_pref}-fold-switcher,
+		.#{$cl_pref}-f-s-cap {
+			font-style: normal;
+			color: #999;
+		}
+		.#{$cl_pref}-fold-switcher {
+			cursor: pointer;
+			// vertical-align: middle;
+			overflow: hidden;
+			svg {
+				path {}
+			}
+		}
+	}
 	.#{$cl_pref}__branch {
 		color: #999;
 	}

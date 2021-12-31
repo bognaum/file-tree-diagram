@@ -40,7 +40,7 @@ export default class BuildOptions {
 			CP = this.cssClassPrefix,
 			[type, ext] = (() => {
 				if (m.ch) {
-					if (m.ch instanceof Array)
+					if ((m.ch instanceof Array) && (! m.folded))
 						return [`opened-folder`, ""];
 					else 
 						return [`closed-folder`, ""];
@@ -84,22 +84,27 @@ export default class BuildOptions {
 
 		this.currMount.append(dom);
 
+		const icon = dom.querySelector(`.${ CP }-icon`);
 		if (m.ch?.length) {
 			const foldSwitcher = makeFoldSwitcher({CP, m});
-			dom.querySelector(`.${ CP }-icon`).after(foldSwitcher);
+			icon.after(foldSwitcher);
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
 				if (m.folded) {
 					foldSwitcher.api.showFoldState();
 					m.chlistDom.api.collapse();
+					icon.classList.remove(`${ CP }-icon_type-opened-folder`);
+					icon.classList.add   (`${ CP }-icon_type-closed-folder`);
 				} else {
+					icon.classList.remove(`${ CP }-icon_type-closed-folder`);
+					icon.classList.add   (`${ CP }-icon_type-opened-folder`);
 					foldSwitcher.api.showUnfoldState();
 					m.chlistDom.api.expand();
 				}
 			}
 		} else {
 			const fSCap = makeFoldSwitcherCap({CP});
-			dom.querySelector(`.${ CP }-icon`).after(fSCap);
+			icon.after(fSCap);
 		}
 
 	}

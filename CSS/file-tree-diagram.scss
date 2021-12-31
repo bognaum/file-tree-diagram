@@ -18,11 +18,11 @@ $cl_pref: "file-tree-diagram";
 	white-space: pre;
 	font-family: consolas, monospace;
 	font-style: italic;
-	/*.#{$cl_pref}-ch-list {
-		overflow: hidden;
+	.#{$cl_pref}-ch-list {
+		// overflow: hidden;
 		transition: height .2s linear;
 	}
-*/	.#{$cl_pref}__header {
+	.#{$cl_pref}__header {
 		.#{$cl_pref}-fold-switcher,
 		.#{$cl_pref}-f-s-cap {
 			font-style: normal;

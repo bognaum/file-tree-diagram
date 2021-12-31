@@ -11,10 +11,10 @@ export default class BuildOptions {
 	newChList (m) {
 		const 
 			CP = this.cssClassPrefix,
-			chList = eHTML(`<div class="${ CP }-ch-list"></div>`);
+			chList = makeChList(CP);
 		m.chlistDom = chList; 
 		this.currMount.append(chList);
-		this.mountStack.push(chList);
+		this.mountStack.push(chList.api.slot);
 	}
 	endOfChList (m) {
 		this.mountStack.pop();
@@ -91,10 +91,12 @@ export default class BuildOptions {
 		if (foldSwitcher) {
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
-				m.chlistDom.hidden = m.folded;
+				// m.chlistDom.hidden = m.folded;
 				if (m.folded) {
+					m.chlistDom.api.collapse();
 					foldSwitcher__arrow.setAttribute("transform", "");
 				} else {
+					m.chlistDom.api.expand();
 					foldSwitcher__arrow.setAttribute("transform", "rotate(90 207 207)");
 				}
 			}
@@ -137,6 +139,37 @@ function getFoldSwitcher(CP) {
 		`</span>`,
 	].join("");
 } 
+
+function makeChList(CP) {
+	const dom = eHTML([
+		`<div class="${ CP }-ch-list" style="overflow: hidden;">`,
+			`<div class="${ CP }-ch-list-underflow"></div>`,
+		`</div>`,
+	].join(""));
+	dom.api = {
+		slot     : dom.children[0],
+		collapse : collapse,
+		expand   : expand,
+	};
+	return dom;
+
+	function collapse(ev) {
+		const height = dom.api.slot.getBoundingClientRect().height;
+		dom.style.height = height+"px";
+		setTimeout(function() {dom.style.height = "0px";});
+		dom.addEventListener("transitionend", function(ev) {
+			// ev.target.style.height = "";
+		}, {once: true});
+	}
+	function expand(ev) {
+		const height = dom.api.slot.getBoundingClientRect().height;
+		dom.style.height = "0px";
+		setTimeout(function() {dom.style.height = height+"px";});
+		dom.addEventListener("transitionend", function(ev) {
+			ev.target.style.height = "";
+		}, {once: true});
+	}
+}
 
 function getFoldSwitcherCap(CP) {
 	return `<span class="${ CP }-f-s-cap">─╴</span>`;

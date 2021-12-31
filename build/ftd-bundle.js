@@ -160,7 +160,7 @@ class BuildOptions {
 	newChList (m) {
 		const 
 			CP = this.cssClassPrefix,
-			chList = makeChList(CP);
+			chList = makeChList({CP, m});
 		m.chlistDom = chList; 
 		this.currMount.append(chList);
 		this.mountStack.push(chList.api.slot);
@@ -217,7 +217,6 @@ class BuildOptions {
 						`${ CP }-icon_style-${ m["self-iconstyle"] } `,
 					`"`,
 				`>   </span>`, 
-				m.ch?.length ? getFoldSwitcher(CP) : getFoldSwitcherCap(CP), 
 				`<span class="${ CP }__name">${ m.name }</span>`,
 
 				if_ (m.comment) (
@@ -231,25 +230,27 @@ class BuildOptions {
 				),
 			`</span>`,
 		].join(""));
-		const 
-			foldSwitcher        = dom.querySelector(`.${ CP }-fold-switcher`),
-			foldSwitcher__arrow = dom.querySelector(`.${ CP }-fold-switcher__arrow`);
 
 		this.currMount.append(dom);
 
-		if (foldSwitcher) {
+		if (m.ch?.length) {
+			const foldSwitcher = makeFoldSwitcher({CP, m});
+			dom.querySelector(`.${ CP }-icon`).after(foldSwitcher);
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
-				// m.chlistDom.hidden = m.folded;
 				if (m.folded) {
+					foldSwitcher.api.showFoldState();
 					m.chlistDom.api.collapse();
-					foldSwitcher__arrow.setAttribute("transform", "");
 				} else {
+					foldSwitcher.api.showUnfoldState();
 					m.chlistDom.api.expand();
-					foldSwitcher__arrow.setAttribute("transform", "rotate(90 207 207)");
 				}
 			}
+		} else {
+			const fSCap = makeFoldSwitcherCap({CP});
+			dom.querySelector(`.${ CP }-icon`).after(fSCap);
 		}
+
 	}
 	addBranchEl (type) {
 		const 
@@ -274,8 +275,8 @@ class BuildOptions {
 	endOfRow (m) {this.currMount.append("\n");}
 }
 
-function getFoldSwitcher(CP) {
-	return [
+function makeFoldSwitcher({CP, m}) {
+	const dom = eHTML([
 		`<span class="${ CP }-fold-switcher">`,
 			`<svg width=".7em" height=".7em" x="0px" y="0px" viewBox="0 0 415.346 415.346">`,
 				`<g>`,
@@ -286,10 +287,33 @@ function getFoldSwitcher(CP) {
 			`</svg>`,
 			` `,
 		`</span>`,
-	].join("");
+	].join(""));
+	dom.api = {
+		showFoldState,
+		showUnfoldState,
+	};
+	if (m.folded)
+		showFoldState();
+	else
+		showUnfoldState();
+	return dom;
+
+	function showFoldState() {
+		dom.querySelector(`.${ CP }-fold-switcher__arrow`).setAttribute(
+			"transform",
+			""
+		);
+	}
+
+	function showUnfoldState() {
+		dom.querySelector(`.${ CP }-fold-switcher__arrow`).setAttribute(
+			"transform",
+			"rotate(90 207 207)"
+		);
+	}
 } 
 
-function makeChList(CP) {
+function makeChList({CP, m}) {
 	const dom = eHTML([
 		`<div class="${ CP }-ch-list" style="overflow: hidden;">`,
 			`<div class="${ CP }-ch-list-underflow"></div>`,
@@ -300,6 +324,8 @@ function makeChList(CP) {
 		collapse : collapse,
 		expand   : expand,
 	};
+	if (m.folded)
+		collapse();
 	return dom;
 
 	function collapse(ev) {
@@ -320,8 +346,8 @@ function makeChList(CP) {
 	}
 }
 
-function getFoldSwitcherCap(CP) {
-	return `<span class="${ CP }-f-s-cap">─╴</span>`;
+function makeFoldSwitcherCap({CP}) {
+	return eHTML(`<span class="${ CP }-f-s-cap">─╴</span>`);
 }
 
 

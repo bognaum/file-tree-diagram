@@ -280,6 +280,33 @@ class BuildOptions {
 	endOfRow (m) {this.currMount.append("\n");}
 }
 
+function makeIcon({CP, m}) {
+	const [type, ext] = (() => {
+		if (m.ch) {
+			if ((m.ch instanceof Array) && (! m.folded))
+				return [`opened-folder`, ""];
+			else 
+				return [`closed-folder`, ""];
+		} else {
+			const 
+				ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
+				replaced = _icon_manager_js__WEBPACK_IMPORTED_MODULE_0__.default.getType(ext)
+					.replaceAll(".", "---");
+
+			return [replaced, ext];
+		}
+	})();
+	const dom = eHTML([
+		`<span `,
+			`class="`,
+				`${ CP }-icon `,
+				`${ CP }-icon_type-${type} `,
+				`${ CP }-icon_style-${ m["self-iconstyle"] } `,
+			`"`,
+		`>   </span>`,
+	].join(""));
+}
+
 function makeFoldSwitcher({CP, m}) {
 	const dom = eHTML([
 		`<span class="${ CP }-fold-switcher">`,
@@ -373,6 +400,43 @@ function eHTML(code, shell=null) {
 function eHTMLDF(code) {
 	const _shell = document.createElement("template");
 	return _shell.innerHTML = code, _shell.content;
+}
+
+function bDOM(...args) {
+	const 
+		_shell = document.createElement("template"),
+		pastedElems = [];
+	for (const [k, v] of args.entries()) {
+		if (typeof v == "string")
+			continue;
+		else if (v instanceof Node) {
+			const id = pastedElems.push(v) - 1;
+			args[k] = `<!--<<<${ id }>>>-->`;
+		}
+	}
+	_shell.innerHTML = args.join("");
+	const dom = _shell.content;
+	// const dom = _shell.content[0];
+	recur(dom);
+	dom.api = {
+		children: pastedElems,
+	};
+	return dom;
+
+	function recur(el) {
+		for (const node of el.childNodes) {
+			if (node.nodeType == document.COMMENT_NODE) {
+				const m = node.textContent.match(/^<<<(\d+)>>>$/);
+				if (m) {
+					const id = parseInt(m[1]);
+					node.before(pastedElems[id]);
+					node.textContent = ` pasted ${ di } `;
+				}
+			} else if (node.nodeType == document.ELEMENT_NODE) {
+				recur(node);
+			}
+		}
+	}
 }
 
 /***/ }),

@@ -55,19 +55,21 @@ export default class BuildOptions {
 			})(),
 			commentAlignLiner = "─".repeat((m.aLongestName - m.name.length) || 0);
 
-		const dom = eHTML([
+		let 
+			icon,
+			foldSwitcher,
+			fsCap;
+
+		const dom = makeWC(
 			`<span `,
 				`class="${ CP }__header"`,
 				`data-type="${ type }"`,
 				`data-ext="${ ext }"`,
 			`>`,
-				`<span `,
-					`class="`,
-						`${ CP }-icon `,
-						`${ CP }-icon_type-${type} `,
-						`${ CP }-icon_style-${ m["self-iconstyle"] } `,
-					`"`,
-				`>   </span>`, 
+				icon = makeIcon({CP, m}), 
+				m.ch?.length ? 
+					(foldSwitcher = makeFoldSwitcher({CP, m}))
+					: fsCap = makeFoldSwitcherCap({CP}),
 				`<span class="${ CP }__name">${ m.name }</span>`,
 
 				if_ (m.comment) (
@@ -80,31 +82,23 @@ export default class BuildOptions {
 					`</span>`
 				),
 			`</span>`,
-		].join(""));
+		);
 
 		this.currMount.append(dom);
 
-		const icon = dom.querySelector(`.${ CP }-icon`);
-		if (m.ch?.length) {
-			const foldSwitcher = makeFoldSwitcher({CP, m});
-			icon.after(foldSwitcher);
+		// const icon = dom.querySelector(`.${ CP }-icon`);
+		if (foldSwitcher) {
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
 				if (m.folded) {
 					foldSwitcher.api.showFoldState();
 					m.chlistDom.api.collapse();
-					icon.classList.remove(`${ CP }-icon_type-opened-folder`);
-					icon.classList.add   (`${ CP }-icon_type-closed-folder`);
 				} else {
-					icon.classList.remove(`${ CP }-icon_type-closed-folder`);
-					icon.classList.add   (`${ CP }-icon_type-opened-folder`);
 					foldSwitcher.api.showUnfoldState();
 					m.chlistDom.api.expand();
 				}
+				icon.api.setIcon();
 			}
-		} else {
-			const fSCap = makeFoldSwitcherCap({CP});
-			icon.after(fSCap);
 		}
 
 	}
@@ -123,43 +117,46 @@ export default class BuildOptions {
 				e: "   ",
 			};
 		const text = slim[type] || "err";
-		this.currMount.append(eHTML(
-			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"
-				>${ slim[type] || "err" }</span>`
+		this.currMount.append(makeWC(
+			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"`,
+				`>${ slim[type] || "err" }</span>`
 		));
 	}
 	endOfRow (m) {this.currMount.append("\n");}
 }
 
 function makeIcon({CP, m}) {
-	const [type, ext] = (() => {
-		if (m.ch) {
-			if ((m.ch instanceof Array) && (! m.folded))
-				return [`opened-folder`, ""];
-			else 
-				return [`closed-folder`, ""];
-		} else {
-			const 
-				ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
-				replaced = iconManager.getType(ext)
-					.replaceAll(".", "---");
+	const dom = makeWC(`<span class="${ CP }-icon">   </span>`,);
+	dom.api.setIcon = setIcon;
+	setIcon();
+	return dom;
 
-			return [replaced, ext];
-		}
-	})();
-	const dom = eHTML([
-		`<span `,
-			`class="`,
-				`${ CP }-icon `,
-				`${ CP }-icon_type-${type} `,
-				`${ CP }-icon_style-${ m["self-iconstyle"] } `,
-			`"`,
-		`>   </span>`,
-	].join(""));
+	function setIcon() {
+		const [type, ext] = (() => {
+			if (m.ch) {
+				if ((m.ch instanceof Array) && (! m.folded))
+					return [`opened-folder`, ""];
+				else 
+					return [`closed-folder`, ""];
+			} else {
+				const 
+					ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
+					replaced = iconManager.getType(ext)
+						.replaceAll(".", "---");
+
+				return [replaced, ext];
+			}
+		})();
+		dom.className = [
+			`${ CP }-icon `,
+			`${ CP }-icon_type-${type} `,
+			`${ CP }-icon_style-${ m["self-iconstyle"] } `,
+		].join(" ");
+	}
 }
 
 function makeFoldSwitcher({CP, m}) {
-	const dom = eHTML([
+	const dom = makeWC(
 		`<span class="${ CP }-fold-switcher">`,
 			`<svg width=".7em" height=".7em" x="0px" y="0px" viewBox="0 0 415.346 415.346">`,
 				`<g>`,
@@ -170,7 +167,7 @@ function makeFoldSwitcher({CP, m}) {
 			`</svg>`,
 			` `,
 		`</span>`,
-	].join(""));
+	);
 	dom.api = {
 		showFoldState,
 		showUnfoldState,
@@ -197,11 +194,11 @@ function makeFoldSwitcher({CP, m}) {
 } 
 
 function makeChList({CP, m}) {
-	const dom = eHTML([
+	const dom = makeWC(
 		`<div class="${ CP }-ch-list" style="overflow: hidden;">`,
 			`<div class="${ CP }-ch-list-underflow"></div>`,
 		`</div>`,
-	].join(""));
+	);
 	dom.api = {
 		slot     : dom.children[0],
 		collapse : collapse,
@@ -230,7 +227,7 @@ function makeChList({CP, m}) {
 }
 
 function makeFoldSwitcherCap({CP}) {
-	return eHTML(`<span class="${ CP }-f-s-cap">─╴</span>`);
+	return makeWC(`<span class="${ CP }-f-s-cap">─╴</span>`);
 }
 
 
@@ -238,22 +235,7 @@ function if_ (cond) {
 	return cond ? (...args) => args.join("") : () => "";
 }
 
-function eHTML(code, shell=null) {
-	const _shell = 
-		! shell                  ? document.createElement("div") :
-		typeof shell == "string" ? document.createElement(shell) :
-		typeof shell == "object" ? shell :
-			null;
-	_shell.innerHTML = code;
-	return _shell.children[0];
-}
-
-function eHTMLDF(code) {
-	const _shell = document.createElement("template");
-	return _shell.innerHTML = code, _shell.content;
-}
-
-function bDOM(...args) {
+function makeWC(...args) {
 	const 
 		_shell = document.createElement("template"),
 		pastedElems = [];
@@ -267,24 +249,28 @@ function bDOM(...args) {
 	}
 	_shell.innerHTML = args.join("");
 	// const dom = _shell.content;
-	const dom = _shell.content.childNodes[0];
-	recur(dom);
+	const 
+		dom = _shell.content.childNodes[0],
+		selfEls = [dom, ... dom.querySelectorAll("*")];
+	recurPasteChildren(dom);
 	dom.api = {
+		selfEls,
 		children: pastedElems,
+		dom,
 	};
 	return dom;
 
-	function recur(el) {
+	function recurPasteChildren(el) {
 		for (const node of el.childNodes) {
 			if (node.nodeType == document.COMMENT_NODE) {
 				const m = node.textContent.match(/^<<<(\d+)>>>$/);
 				if (m) {
 					const id = parseInt(m[1]);
 					node.before(pastedElems[id]);
-					node.textContent = ` pasted ${ id } `;
+					node.textContent = ` pasted ${ id } >>> `;
 				}
 			} else if (node.nodeType == document.ELEMENT_NODE) {
-				recur(node);
+				recurPasteChildren(node);
 			}
 		}
 	}

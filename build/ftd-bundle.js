@@ -204,19 +204,21 @@ class BuildOptions {
 			})(),
 			commentAlignLiner = "─".repeat((m.aLongestName - m.name.length) || 0);
 
-		const dom = eHTML([
+		let 
+			icon,
+			foldSwitcher,
+			fsCap;
+
+		const dom = mComponent(
 			`<span `,
 				`class="${ CP }__header"`,
 				`data-type="${ type }"`,
 				`data-ext="${ ext }"`,
 			`>`,
-				`<span `,
-					`class="`,
-						`${ CP }-icon `,
-						`${ CP }-icon_type-${type} `,
-						`${ CP }-icon_style-${ m["self-iconstyle"] } `,
-					`"`,
-				`>   </span>`, 
+				icon = makeIcon({CP, m}), 
+				m.ch?.length ? 
+					(foldSwitcher = makeFoldSwitcher({CP, m}))
+					: fsCap = makeFoldSwitcherCap({CP}),
 				`<span class="${ CP }__name">${ m.name }</span>`,
 
 				if_ (m.comment) (
@@ -229,31 +231,23 @@ class BuildOptions {
 					`</span>`
 				),
 			`</span>`,
-		].join(""));
+		);
 
 		this.currMount.append(dom);
 
-		const icon = dom.querySelector(`.${ CP }-icon`);
-		if (m.ch?.length) {
-			const foldSwitcher = makeFoldSwitcher({CP, m});
-			icon.after(foldSwitcher);
+		// const icon = dom.querySelector(`.${ CP }-icon`);
+		if (foldSwitcher) {
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
 				if (m.folded) {
 					foldSwitcher.api.showFoldState();
 					m.chlistDom.api.collapse();
-					icon.classList.remove(`${ CP }-icon_type-opened-folder`);
-					icon.classList.add   (`${ CP }-icon_type-closed-folder`);
 				} else {
-					icon.classList.remove(`${ CP }-icon_type-closed-folder`);
-					icon.classList.add   (`${ CP }-icon_type-opened-folder`);
 					foldSwitcher.api.showUnfoldState();
 					m.chlistDom.api.expand();
 				}
+				icon.api.setIcon();
 			}
-		} else {
-			const fSCap = makeFoldSwitcherCap({CP});
-			icon.after(fSCap);
 		}
 
 	}
@@ -281,30 +275,33 @@ class BuildOptions {
 }
 
 function makeIcon({CP, m}) {
-	const [type, ext] = (() => {
-		if (m.ch) {
-			if ((m.ch instanceof Array) && (! m.folded))
-				return [`opened-folder`, ""];
-			else 
-				return [`closed-folder`, ""];
-		} else {
-			const 
-				ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
-				replaced = _icon_manager_js__WEBPACK_IMPORTED_MODULE_0__.default.getType(ext)
-					.replaceAll(".", "---");
+	const dom = mComponent(`<span class="${ CP }-icon">   </span>`,);
+	dom.api.setIcon = setIcon;
+	setIcon();
+	return dom;
 
-			return [replaced, ext];
-		}
-	})();
-	const dom = eHTML([
-		`<span `,
-			`class="`,
-				`${ CP }-icon `,
-				`${ CP }-icon_type-${type} `,
-				`${ CP }-icon_style-${ m["self-iconstyle"] } `,
-			`"`,
-		`>   </span>`,
-	].join(""));
+	function setIcon() {
+		const [type, ext] = (() => {
+			if (m.ch) {
+				if ((m.ch instanceof Array) && (! m.folded))
+					return [`opened-folder`, ""];
+				else 
+					return [`closed-folder`, ""];
+			} else {
+				const 
+					ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
+					replaced = _icon_manager_js__WEBPACK_IMPORTED_MODULE_0__.default.getType(ext)
+						.replaceAll(".", "---");
+
+				return [replaced, ext];
+			}
+		})();
+		dom.className = [
+			`${ CP }-icon `,
+			`${ CP }-icon_type-${type} `,
+			`${ CP }-icon_style-${ m["self-iconstyle"] } `,
+		].join(" ");
+	}
 }
 
 function makeFoldSwitcher({CP, m}) {
@@ -402,7 +399,7 @@ function eHTMLDF(code) {
 	return _shell.innerHTML = code, _shell.content;
 }
 
-function bDOM(...args) {
+function mComponent(...args) {
 	const 
 		_shell = document.createElement("template"),
 		pastedElems = [];
@@ -415,25 +412,29 @@ function bDOM(...args) {
 		}
 	}
 	_shell.innerHTML = args.join("");
-	const dom = _shell.content;
-	// const dom = _shell.content[0];
-	recur(dom);
+	// const dom = _shell.content;
+	const 
+		dom = _shell.content.childNodes[0],
+		selfEls = [dom, ... dom.querySelectorAll("*")];
+	recurPasteChildren(dom);
 	dom.api = {
+		selfEls,
 		children: pastedElems,
+		dom,
 	};
 	return dom;
 
-	function recur(el) {
+	function recurPasteChildren(el) {
 		for (const node of el.childNodes) {
 			if (node.nodeType == document.COMMENT_NODE) {
 				const m = node.textContent.match(/^<<<(\d+)>>>$/);
 				if (m) {
 					const id = parseInt(m[1]);
 					node.before(pastedElems[id]);
-					node.textContent = ` pasted ${ di } `;
+					node.textContent = ` pasted ${ id } >>> `;
 				}
 			} else if (node.nodeType == document.ELEMENT_NODE) {
-				recur(node);
+				recurPasteChildren(node);
 			}
 		}
 	}

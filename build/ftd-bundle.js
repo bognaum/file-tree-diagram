@@ -28,7 +28,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const version = "2.1.3";
+const version = "2.2.0";
 
 class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {

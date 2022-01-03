@@ -44,21 +44,6 @@ export default class BuildOptions {
 	addHeader (m) {
 		const 
 			CP = this.cssClassPrefix,
-			[type, ext] = (() => {
-				if (m.ch) {
-					if ((m.ch instanceof Array) && (! m.folded))
-						return [`opened-folder`, ""];
-					else 
-						return [`closed-folder`, ""];
-				} else {
-					const 
-						ext      = m.name.match(/\.([^.]*)$/)?.[1] || "",
-						replaced = iconManager.getType(ext)
-							.replaceAll(".", "---");
-
-					return [replaced, ext];
-				}
-			})(),
 			commentAlignLiner = "─".repeat((m.aLongestName - m.name.length) || 0);
 
 		let 
@@ -67,11 +52,7 @@ export default class BuildOptions {
 			fsCap;
 
 		const dom = makeWC(
-			`<span `,
-				`class="${ CP }__header"`,
-				`data-type="${ type }"`,
-				`data-ext="${ ext }"`,
-			`>`,
+			`<span class="${ CP }__header">`,
 				icon = makeIcon({CP, m}), 
 				m.ch?.length ? 
 					(foldSwitcher = makeFoldSwitcher({CP, m}))
@@ -92,7 +73,6 @@ export default class BuildOptions {
 
 		this.currlist.push(dom);
 
-		// const icon = dom.querySelector(`.${ CP }-icon`);
 		if (foldSwitcher) {
 			foldSwitcher.onclick = function(ev) {
 				m.folded = ! m.folded;
@@ -106,7 +86,6 @@ export default class BuildOptions {
 				icon.api.setIcon();
 			}
 		}
-
 	}
 	addBranchEl (type) {
 		const 

@@ -3,21 +3,27 @@ import iconManager from "./icon-manager.js";
 export default class BuildOptions {
 	constructor (cssClassPrefix="file-tree") {
 		this.cssClassPrefix = cssClassPrefix
-		this.shell = new DocumentFragment();
 		this.chProp = "ch";
-		this.mountStack = [this.shell];
+		this.listStack = [[]];
 	}
-	get currMount () {return this.mountStack[this.mountStack.length - 1]}
+	get dom () {
+		return makeWC(
+			`<div>`,
+				... this.listStack[0],
+			`</div>`,
+		);
+	}
+	get currlist () {return this.listStack[this.listStack.length - 1]}
 	newChList (m) {
-		const 
-			CP = this.cssClassPrefix,
-			chList = makeChList({CP, m});
-		m.chlistDom = chList; 
-		this.currMount.append(chList);
-		this.mountStack.push(chList.api.slot);
+		this.listStack.push([]);
 	}
 	endOfChList (m) {
-		this.mountStack.pop();
+		const 
+			CP = this.cssClassPrefix,
+			children = this.listStack.pop(),
+			chList = makeChList({CP, m, children});
+		m.chlistDom = chList; 
+		this.currlist.push(chList);
 	}
 	newRow (m) {
 		if (m.ch) {
@@ -84,7 +90,7 @@ export default class BuildOptions {
 			`</span>`,
 		);
 
-		this.currMount.append(dom);
+		this.currlist.push(dom);
 
 		// const icon = dom.querySelector(`.${ CP }-icon`);
 		if (foldSwitcher) {
@@ -117,12 +123,12 @@ export default class BuildOptions {
 				e: "   ",
 			};
 		const text = slim[type] || "err";
-		this.currMount.append(makeWC(
+		this.currlist.push(makeWC(
 			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"`,
 				`>${ slim[type] || "err" }</span>`
 		));
 	}
-	endOfRow (m) {this.currMount.append("\n");}
+	endOfRow (m) {this.currlist.push("\n");}
 }
 
 function makeIcon({CP, m}) {
@@ -193,10 +199,12 @@ function makeFoldSwitcher({CP, m}) {
 	}
 } 
 
-function makeChList({CP, m}) {
+function makeChList({CP, m, children}) {
 	const dom = makeWC(
 		`<div class="${ CP }-ch-list" style="overflow: hidden;">`,
-			`<div class="${ CP }-ch-list-underflow"></div>`,
+			`<div class="${ CP }-ch-list-underflow">`,
+				...children,
+			`</div>`,
 		`</div>`,
 	);
 	dom.api = {

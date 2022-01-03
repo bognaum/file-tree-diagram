@@ -89,7 +89,7 @@ function build (self, elem, templ) {
 		const dom = (0,_draw_data_tree_js__WEBPACK_IMPORTED_MODULE_1__.default)(
 			ob, 
 			new _BuildOptions_js__WEBPACK_IMPORTED_MODULE_0__.default(self.classPrefix)
-		).shell;
+		).dom;
 		elem.append(dom)
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("executed");
@@ -152,21 +152,27 @@ __webpack_require__.r(__webpack_exports__);
 class BuildOptions {
 	constructor (cssClassPrefix="file-tree") {
 		this.cssClassPrefix = cssClassPrefix
-		this.shell = new DocumentFragment();
 		this.chProp = "ch";
-		this.mountStack = [this.shell];
+		this.listStack = [[]];
 	}
-	get currMount () {return this.mountStack[this.mountStack.length - 1]}
+	get dom () {
+		return makeWC(
+			`<div>`,
+				... this.listStack[0],
+			`</div>`,
+		);
+	}
+	get currlist () {return this.listStack[this.listStack.length - 1]}
 	newChList (m) {
-		const 
-			CP = this.cssClassPrefix,
-			chList = makeChList({CP, m});
-		m.chlistDom = chList; 
-		this.currMount.append(chList);
-		this.mountStack.push(chList.api.slot);
+		this.listStack.push([]);
 	}
 	endOfChList (m) {
-		this.mountStack.pop();
+		const 
+			CP = this.cssClassPrefix,
+			children = this.listStack.pop(),
+			chList = makeChList({CP, m, children});
+		m.chlistDom = chList; 
+		this.currlist.push(chList);
 	}
 	newRow (m) {
 		if (m.ch) {
@@ -209,7 +215,7 @@ class BuildOptions {
 			foldSwitcher,
 			fsCap;
 
-		const dom = mComponent(
+		const dom = makeWC(
 			`<span `,
 				`class="${ CP }__header"`,
 				`data-type="${ type }"`,
@@ -233,7 +239,7 @@ class BuildOptions {
 			`</span>`,
 		);
 
-		this.currMount.append(dom);
+		this.currlist.push(dom);
 
 		// const icon = dom.querySelector(`.${ CP }-icon`);
 		if (foldSwitcher) {
@@ -266,16 +272,16 @@ class BuildOptions {
 				e: "   ",
 			};
 		const text = slim[type] || "err";
-		this.currMount.append(eHTML(
-			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"
-				>${ slim[type] || "err" }</span>`
+		this.currlist.push(makeWC(
+			`<span class="${this.cssClassPrefix}__branch ${this.cssClassPrefix}_${ type }-type"`,
+				`>${ slim[type] || "err" }</span>`
 		));
 	}
-	endOfRow (m) {this.currMount.append("\n");}
+	endOfRow (m) {this.currlist.push("\n");}
 }
 
 function makeIcon({CP, m}) {
-	const dom = mComponent(`<span class="${ CP }-icon">   </span>`,);
+	const dom = makeWC(`<span class="${ CP }-icon">   </span>`,);
 	dom.api.setIcon = setIcon;
 	setIcon();
 	return dom;
@@ -305,7 +311,7 @@ function makeIcon({CP, m}) {
 }
 
 function makeFoldSwitcher({CP, m}) {
-	const dom = eHTML([
+	const dom = makeWC(
 		`<span class="${ CP }-fold-switcher">`,
 			`<svg width=".7em" height=".7em" x="0px" y="0px" viewBox="0 0 415.346 415.346">`,
 				`<g>`,
@@ -316,7 +322,7 @@ function makeFoldSwitcher({CP, m}) {
 			`</svg>`,
 			` `,
 		`</span>`,
-	].join(""));
+	);
 	dom.api = {
 		showFoldState,
 		showUnfoldState,
@@ -342,12 +348,14 @@ function makeFoldSwitcher({CP, m}) {
 	}
 } 
 
-function makeChList({CP, m}) {
-	const dom = eHTML([
+function makeChList({CP, m, children}) {
+	const dom = makeWC(
 		`<div class="${ CP }-ch-list" style="overflow: hidden;">`,
-			`<div class="${ CP }-ch-list-underflow"></div>`,
+			`<div class="${ CP }-ch-list-underflow">`,
+				...children,
+			`</div>`,
 		`</div>`,
-	].join(""));
+	);
 	dom.api = {
 		slot     : dom.children[0],
 		collapse : collapse,
@@ -376,7 +384,7 @@ function makeChList({CP, m}) {
 }
 
 function makeFoldSwitcherCap({CP}) {
-	return eHTML(`<span class="${ CP }-f-s-cap">─╴</span>`);
+	return makeWC(`<span class="${ CP }-f-s-cap">─╴</span>`);
 }
 
 
@@ -384,22 +392,7 @@ function if_ (cond) {
 	return cond ? (...args) => args.join("") : () => "";
 }
 
-function eHTML(code, shell=null) {
-	const _shell = 
-		! shell                  ? document.createElement("div") :
-		typeof shell == "string" ? document.createElement(shell) :
-		typeof shell == "object" ? shell :
-			null;
-	_shell.innerHTML = code;
-	return _shell.children[0];
-}
-
-function eHTMLDF(code) {
-	const _shell = document.createElement("template");
-	return _shell.innerHTML = code, _shell.content;
-}
-
-function mComponent(...args) {
+function makeWC(...args) {
 	const 
 		_shell = document.createElement("template"),
 		pastedElems = [];

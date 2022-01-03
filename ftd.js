@@ -65,7 +65,7 @@ function build (self, elem, templ) {
 		const dom = assemblyTree(
 			ob, 
 			new BuildOptions(self.classPrefix)
-		).shell;
+		).dom;
 		elem.append(dom)
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("executed");

@@ -379,8 +379,8 @@ function makeWC(...args) {
 		if (typeof v == "string")
 			continue;
 		else if (v instanceof Node) {
-			const id = pastedElems.push(v) - 1;
-			args[k] = `<!--<<<${ id }>>>-->`;
+			const index = pastedElems.push(v) - 1;
+			args[k] = `<!--<<<${ index }>>>-->`;
 		}
 	}
 	_shell.innerHTML = args.join("");
@@ -401,9 +401,9 @@ function makeWC(...args) {
 			if (node.nodeType == document.COMMENT_NODE) {
 				const m = node.textContent.match(/^<<<(\d+)>>>$/);
 				if (m) {
-					const id = parseInt(m[1]);
-					node.before(pastedElems[id]);
-					node.textContent = ` pasted ${ id } >>> `;
+					const index = parseInt(m[1]);
+					node.after(pastedElems[index]);
+					node.textContent = ` next pasted ${ index } >>> `;
 				}
 			} else if (node.nodeType == document.ELEMENT_NODE) {
 				recurPasteChildren(node);

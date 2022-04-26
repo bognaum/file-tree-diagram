@@ -254,7 +254,7 @@ function makeWC(...args) {
 				if (m) {
 					const index = parseInt(m[1]);
 					node.after(pastedElems[index]);
-					node.textContent = ` next pasted ${ index } >>> `;
+					node.textContent = ` pasted-${ index }->> `;
 				}
 			} else if (node.nodeType == document.ELEMENT_NODE) {
 				recurPasteChildren(node);

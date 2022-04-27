@@ -1,0 +1,46 @@
+.#{$cl_pref}__menu-container {
+	z-index: -1;
+	opacity: 0;
+	transition: opacity .2s linear;
+	position: relative;
+	height: 15px;
+	>.#{$cl_pref}__burger {
+		overflow: hidden;
+		transition: all .2s linear;
+		opacity: 1;
+		width: 15px;
+		height: 15px;
+		// fill: #999;
+		margin-left: 10px;
+	}
+	>.#{$cl_pref}__menu {
+		position: absolute;
+		right: 0;
+		top: 0;
+		overflow: hidden;
+		transition: all .2s linear;
+		width: 0;
+		height: 0;
+		>button {
+			display: block;
+			width: 100%;
+		}
+		>.#{$cl_pref}__copy-all-btn {}
+		>.#{$cl_pref}__copy-unfolded-btn {}
+	}
+	&:hover {
+		>.#{$cl_pref}__burger {
+			opacity: 0;
+		}
+		>.#{$cl_pref}__menu {
+			width: 100px;
+			height: 50px;
+		}
+	}
+}
+&:hover {
+	.#{$cl_pref}__menu-container {
+		z-index: initial;
+		opacity: 1;
+	}
+}

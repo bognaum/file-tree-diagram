@@ -3,6 +3,7 @@ import assemblyTree from "./draw-data-tree.js";
 import JsonErrHl    from "./json-err-hl/json-err-hl.js";
 import setStyle     from "./CSS/file-tree-diagram.scss.js";
 import iconManager  from "./icon-manager.js";
+import Menu         from "./Menu.js";
 
 const version = "2.2.0";
 
@@ -66,7 +67,8 @@ function build (self, elem, templ) {
 			ob, 
 			new BuildOptions(self.classPrefix)
 		).dom;
-		elem.append(dom)
+		elem.append(dom);
+		elem.append(new Menu(self.classPrefix, ob));
 		elem.classList.remove("executing", "executed", "exec-error");
 		elem.classList.add("executed");
 	} else if (jsonError) {

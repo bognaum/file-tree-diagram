@@ -31,26 +31,54 @@ export default class Menu {
 					`</div>`,
 					`<div class="${ CP }__menu">`,
 						`<button class=${ CP }__copy-btn" id="copy">copy</button>`,
-						// `<button class=${ CP }__copy-all-btn" id="copy-all">copy all</button>`,
-						// `<button class=${ CP }__copy-unfolded-btn" id="copy-unfolded">copy unfolded</button>`,
+						`<label><input id="with-coments" type="checkbox" checked> with <br> comments</label>`,
+						`<label><input id="with-folded"  type="checkbox" checked> with <br> folded</label>`,
 					`</div>`,
 				`</div>`,
 			);
 		dom.api.id["copy"].onclick = function(ev) {
-			const text = assemblyTree(m, new TextographicBuildOptions()).result;
-			copyToClipboard(text);
-		}
-		/*dom.api.id["copy-all"].onclick = function(ev) {
-			const text = assemblyTree(m, new TextographicBuildOptions()).result;
+			const 
+				withComents = dom.api.id["with-coments"].checked,
+				withFolded  = dom.api.id["with-folded"].checked,
+				t = cloneTemplate(m, {withComents, withFolded}),
+				text = assemblyTree(t, new TextographicBuildOptions()).result;
 			console.log(text);
 			copyToClipboard(text);
 		}
-		dom.api.id["copy-unfolded"].onclick = function(ev) {
-			const text = assemblyTree(m, new TextographicBuildOptions({unfoldedOnly: true})).result;
-			console.log(text);
-			copyToClipboard(text);
-		}*/
 		return dom;
+	}
+}
+
+function cloneTemplate(ob, opts) {
+	const o = {
+		... {
+			unfoldedOnly: false,
+			withComents: false,
+		},
+		... opts
+	};
+
+	return recur(ob);
+
+	function recur(subj) {
+		if (subj instanceof Array) {
+			return subj.map(recur);
+		} else if (typeof subj == "object") {
+			const ob = {};
+			for (const i in subj) {
+				if (i == "ch" && subj.folded && !o.withFolded)
+					continue;
+				if (i == "comment" && !o.withComents)
+					continue;
+
+				if (["parent", "chlistDom"].includes(i))
+					continue;
+				ob[i] = recur(subj[i]);
+			}
+			return ob;
+		} else {
+			return subj;
+		}
 	}
 }
 

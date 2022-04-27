@@ -5,7 +5,7 @@ import setStyle     from "./CSS/file-tree-diagram.scss.js";
 import iconManager  from "./icon-manager.js";
 import Menu         from "./Menu.js";
 
-const version = "2.2.0";
+const version = "2.3.0";
 
 export default class FileTree {
 	constructor (classPrefix = "file-tree-diagram") {

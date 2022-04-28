@@ -42,7 +42,7 @@ export default class Menu {
 				withFolded  = dom.api.id["with-folded"].checked,
 				t = cloneTemplate(m, {withComents, withFolded}),
 				text = assemblyTree(t, new TextographicBuildOptions()).result;
-			console.log(text);
+			// console.log(text);
 			copyToClipboard(text);
 		}
 		return dom;

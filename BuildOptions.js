@@ -146,7 +146,7 @@ function makeFoldSwitcher({CP, m}) {
 		`<span class="${ CP }-fold-switcher">`,
 			`<svg width=".7em" height=".7em" x="0px" y="0px" viewBox="0 0 415.346 415.346">`,
 				`<g>`,
-					`<path class="${ CP }-fold-switcher__arrow" `,
+					`<path id="arrow-path" class="${ CP }-fold-switcher__arrow" `,
 					`fill="#999" d="M41.712,415.346c-11.763,0-21.3-9.537-21.3-21.3V21.299C20.412,9.536,29.949,0,41.712,0l346.122,191.697`,
 						`c0,0,15.975,15.975,0,31.951C371.859,239.622,41.712,415.346,41.712,415.346z" transform="rotate(90 207 207)"/>`,
 				`</g>`,
@@ -155,6 +155,7 @@ function makeFoldSwitcher({CP, m}) {
 		`</span>`,
 	);
 	dom.api = {
+		... dom.api,
 		showFoldState,
 		showUnfoldState,
 	};
@@ -165,17 +166,11 @@ function makeFoldSwitcher({CP, m}) {
 	return dom;
 
 	function showFoldState() {
-		dom.querySelector(`.${ CP }-fold-switcher__arrow`).setAttribute(
-			"transform",
-			""
-		);
+		dom.api.id["arrow-path"].setAttribute("transform", "");
 	}
 
 	function showUnfoldState() {
-		dom.querySelector(`.${ CP }-fold-switcher__arrow`).setAttribute(
-			"transform",
-			"rotate(90 207 207)"
-		);
+		dom.api.id["arrow-path"].setAttribute("transform", "rotate(90 207 207)");
 	}
 } 
 

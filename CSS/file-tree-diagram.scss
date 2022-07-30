@@ -17,6 +17,8 @@ $cl_pref: "file-tree-diagram";
 	padding: 10px 5px;
 	white-space: pre;
 	font-family: consolas, monospace;
+	// line-height: 1.15em;
+	line-height: 1.2em;
 	font-style: italic;
 	display: flex;
 	.#{$cl_pref}-ch-list {

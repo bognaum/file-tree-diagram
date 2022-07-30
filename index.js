@@ -1,3 +1,3 @@
-import FTD from "ftd.js";
+import FTD from "./ftd.js";
 
 export default FTD;
